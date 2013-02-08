@@ -1,12 +1,37 @@
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Infinite Scroll Testing</title>
-<meta name="description" content="">
-<meta name="author" content="">
-<link rel="stylesheet" href="style.css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Olog Logbook</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap-responsive.css" type="text/css"/>
+    <link rel="stylesheet" href="css/style.css" type="text/css"/>
+    <link rel="stylesheet" href="style.css">
+    <style type="text/css">
+        body {
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+    </style>
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap-transition.js"></script>
+    <script src="js/bootstrap-alert.js"></script>
+    <script src="js/bootstrap-modal.js"></script>
+    <script src="js/bootstrap-dropdown.js"></script>
+    <script src="js/bootstrap-scrollspy.js"></script>
+    <script src="js/bootstrap-tab.js"></script>
+    <script src="js/bootstrap-tooltip.js"></script>
+    <script src="js/bootstrap-popover.js"></script>
+    <script src="js/bootstrap-button.js"></script>
+    <script src="js/bootstrap-collapse.js"></script>
+    <script src="js/bootstrap-carousel.js"></script>
+    <script src="js/bootstrap-typeahead.js"></script>
+    <script src="js/pure_min.js"></script>
+    <script src="js/jquery.infinitescroll.js"></script>
+    <script src="js/jquery.masonry.js"></script>
 </head>
 <body>
 <div id="content">
@@ -83,10 +108,46 @@
         proident, sunt in culpa qui officia deserunt mollit anim id est 
         laborum.
     </p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
+        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+        enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+        nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
+        in reprehenderit in voluptate velit esse cillum dolore eu 
+        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
+        proident, sunt in culpa qui officia deserunt mollit anim id est 
+        laborum.
+    </p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
+        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+        enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+        nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
+        in reprehenderit in voluptate velit esse cillum dolore eu 
+        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
+        proident, sunt in culpa qui officia deserunt mollit anim id est 
+        laborum.
+    </p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
+        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+        enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+        nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
+        in reprehenderit in voluptate velit esse cillum dolore eu 
+        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
+        proident, sunt in culpa qui officia deserunt mollit anim id est 
+        laborum.
+    </p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
+        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+        enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+        nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
+        in reprehenderit in voluptate velit esse cillum dolore eu 
+        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
+        proident, sunt in culpa qui officia deserunt mollit anim id est 
+        laborum.
+    </p>
 </div>
 <a id="next" href="index2.html">2</a>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>
-<script>window.jQuery || document.write("<script src='js/jquery.js'>\x3C/script>")</script>
+<script>window.jQuery || document.write("<script src='js/jquery.js'>\x3C/script>");</script>
 <script src="js/jquery.infinitescroll.min.js"></script>
 <script>
         $('#content').infinitescroll({
@@ -100,6 +161,23 @@
             }
         }, function(newElements, data, url){
         });
+//        $('#content').infinitescroll({
+//          // other options
+//          dataType: 'json',
+//          appendCallback: false
+//        }, function(json, opts) {
+//          // Get current page
+//          var page = opts.state.currPage; 
+//          // Do something with JSON data, create DOM elements, etc ..
+//        $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logs?limit=10', 'page=' + pageNum, function(logs) {
+//            $('#content').append(rfn(logs));
+//            //$('#target').html(rfn(logs));
+//          });
+//        });
+//    
+//    $(document).ready(function(){
+//        rfn = $('#logs_tmpl').compile(directives);
+//});
 </script>
 </body>
 </html>
