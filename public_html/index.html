@@ -9,13 +9,15 @@
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/bootstrap-responsive.css" type="text/css"/>
     <link rel="stylesheet" href="css/style.css" type="text/css"/>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <style type="text/css">
         body {
             padding-top: 60px;
             padding-bottom: 40px;
         }
     </style>
+    
+    <script src="js/jquery.js"></script>
     <script src="js/bootstrap-transition.js"></script>
     <script src="js/bootstrap-alert.js"></script>
     <script src="js/bootstrap-modal.js"></script>
@@ -31,10 +33,18 @@
     <script src="js/pure_min.js"></script>
     <script src="js/jquery.infinitescroll.js"></script>
     <script src="js/jquery.masonry.js"></script>
+    
+<!--    <script>
+        function test () {
+            $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logs?limit=10', 'page=1', function(logs) {
+                 return logs;
+            });
+        }
+    </script>-->
 </head>
 <body>
 <div id="content">
-    <p>This is the main page.</p>
+<!--    <p>This is the main page.</p>
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
         eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
         enim ad minim veniam, quis nostrud exercitation ullamco laboris 
@@ -70,113 +80,115 @@
         fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
         proident, sunt in culpa qui officia deserunt mollit anim id est 
         laborum.
-    </p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
-        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
-        enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-        nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
-        in reprehenderit in voluptate velit esse cillum dolore eu 
-        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
-        proident, sunt in culpa qui officia deserunt mollit anim id est 
-        laborum.
-    </p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
-        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
-        enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-        nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
-        in reprehenderit in voluptate velit esse cillum dolore eu 
-        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
-        proident, sunt in culpa qui officia deserunt mollit anim id est 
-        laborum.
-    </p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
-        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
-        enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-        nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
-        in reprehenderit in voluptate velit esse cillum dolore eu 
-        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
-        proident, sunt in culpa qui officia deserunt mollit anim id est 
-        laborum.
-    </p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
-        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
-        enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-        nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
-        in reprehenderit in voluptate velit esse cillum dolore eu 
-        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
-        proident, sunt in culpa qui officia deserunt mollit anim id est 
-        laborum.
-    </p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
-        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
-        enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-        nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
-        in reprehenderit in voluptate velit esse cillum dolore eu 
-        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
-        proident, sunt in culpa qui officia deserunt mollit anim id est 
-        laborum.
-    </p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
-        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
-        enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-        nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
-        in reprehenderit in voluptate velit esse cillum dolore eu 
-        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
-        proident, sunt in culpa qui officia deserunt mollit anim id est 
-        laborum.
-    </p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
-        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
-        enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-        nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
-        in reprehenderit in voluptate velit esse cillum dolore eu 
-        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
-        proident, sunt in culpa qui officia deserunt mollit anim id est 
-        laborum.
-    </p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
-        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
-        enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-        nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
-        in reprehenderit in voluptate velit esse cillum dolore eu 
-        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
-        proident, sunt in culpa qui officia deserunt mollit anim id est 
-        laborum.
-    </p>
+    </p>-->
 </div>
-<a id="next" href="index2.html">2</a>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>
-<script>window.jQuery || document.write("<script src='js/jquery.js'>\x3C/script>");</script>
-<script src="js/jquery.infinitescroll.min.js"></script>
+<div id="target"></div>
+<input type='hidden' id='current_page' />
+<!--a id="next" href="javascript:test()">2</a-->
+<!--<a id="next" href="index2.html">2</a>-->
+<a id="next" href="jsonTest.json"></a>
+<!--<a id="next" href="mobile2.json"></a>-->
+
 <script>
-        $('#content').infinitescroll({
-        navSelector     : "#next:last",
+
+    //--------------------------------------------------
+    //	Format the date and time
+    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    function printDate(unix) {
+        var temp = new Date(unix);
+        var dateStr = padStr(temp.getDate()) + ' ' +
+                monthNames[temp.getMonth()] + ' ' +
+                padStr(temp.getFullYear()) + ' ' +
+                padStr(temp.getHours()) + ':' +
+                padStr(temp.getMinutes()) + ':' +
+                padStr(temp.getSeconds());
+        return dateStr;
+    }
+
+    function padStr(i) {
+        return (i < 10) ? "0" + i : "" + i;
+    }
+        
+    var directives = {
+        'div.log': {
+            'log <- context': {
+                '.createdDate': function(arg) {
+                    return printDate(arg.item.createdDate);
+                },
+                '.owner': 'log.owner',
+                '.logbook': {'logbook <- log.logbooks': {
+                        '.+': '#{logbook.name}, '
+                    }},
+                '.tag': {'tag <- log.tags': {
+                        '.+': '#{tag.name}, '
+                    }},
+                '.property': {'property <- log.properties': {
+                        '.+': '#{property.name}, '
+                    }},
+                '.level': 'log.level',
+                '.description': 'log.description',
+            }
+        },
+    };
+    
+    function render() {
+        $.getJSON('jsonTest.json', function(logs) {
+            $('#target').append(rfn(logs));
+            alert('test');
+        });
+    }
+    
+    $(document).ready(function() {
+//        $('#page').val(1);
+        $('#current_page').val(1);
+        pageNum = 1;
+        $.get('_logs.tmpl.html', function(templates) {
+            // Inject templates.
+            $('body').append(templates);
+            rfn = $('#logs_tmpl').compile(directives);
+            $.getJSON('jsonTest.json', function(logs) {
+                $('#target').append(rfn(logs));
+            });
+        });
+    });
+    
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+    // From the mobile demo on Infinite Scroll github
+    //
+    //
+    
+    var _renderItem = function(data) {
+        return "<p>" + data.title + "</p>";
+    };
+    
+    //
+    // Infinite Scroll
+    //
+    $('#content').infinitescroll({
+        navSelector     : "a#next:last",
         nextSelector    : "a#next:last",
         itemSelector    : "#content p",
-        dataType	: 'html',
-        maxPage         : 3,
-        path            : function(index) {
-            return "index" + index + ".html";
-            }
-        }, function(newElements, data, url){
-        });
-//        $('#content').infinitescroll({
-//          // other options
-//          dataType: 'json',
-//          appendCallback: false
-//        }, function(json, opts) {
-//          // Get current page
-//          var page = opts.state.currPage; 
-//          // Do something with JSON data, create DOM elements, etc ..
-//        $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logs?limit=10', 'page=' + pageNum, function(logs) {
-//            $('#content').append(rfn(logs));
-//            //$('#target').html(rfn(logs));
-//          });
-//        });
-//    
-//    $(document).ready(function(){
-//        rfn = $('#logs_tmpl').compile(directives);
-//});
+        dataType        : 'json',
+        debug           : true,
+        appendCallback  : false
+    }, function( response ) {
+//            var jsonData = response.results;
+//            var newElements = "";
+                    $('#target').append.html(rfn(response));
+                    $('#current_page').val(pageNum);  
+//            for ( var i=0; i < jsonData.length; i++) {
+//                var item = $(_renderItem(jsonData[i]));
+//                $("#content").append(item);
+//            }
+
+    });
+
+    //
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+    
 </script>
 </body>
 </html>
