@@ -90,7 +90,6 @@ and open the template in the editor.
                 </div>
             </div>
         </div>
-        <!--script type="text/rocketscript" data-rocketsrc="http://www.infinite-scroll.com/wp-content/plugins/infinite-scroll/jquery.infinitescroll.js"></script-->
         <script>
             $(function() {
                 // Setup drop down menu
@@ -120,7 +119,13 @@ and open the template in the editor.
             function padStr(i) {
                 return (i < 10) ? "0" + i : "" + i;
             }
-			//--------------------------------------------------
+
+        //----------------------------------------------------------------------
+        //
+        //              Directives
+        //
+        //----------------------------------------------------------------------
+
             var directives = {
                 'div.log': {
                     'log <- context': {
@@ -145,7 +150,13 @@ and open the template in the editor.
                     }
                 },
             };
-
+        
+        //----------------------------------------------------------------------
+        //
+        //              Render function
+        //
+        //----------------------------------------------------------------------
+        }
             function render(pageNum) {
 //                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logs?limit=10', 'page=' + $('#page').val(), function(logs) {
                 $.getJSON('jsonTest.json', function(logs) {
@@ -153,18 +164,12 @@ and open the template in the editor.
                     //$('#target').html(rfn(logs));
                 });
             }
-//        $(window).scroll(function () { 
-//        if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
-////            $('#page').val(parseInt($('#page').val()) + 1);
-////            setTimeout(function(){
-//                pageNum += 1;
-//                render(pageNum);
-////            }, 500);
-//           }
-//        });
-
-        // infinitescroll() is called on the element that surrounds 
-        // the items you will be loading more of
+        
+        //----------------------------------------------------------------------
+        //
+        //              Document ready
+        //
+        //----------------------------------------------------------------------
         
             $(document).ready(function() {
                 $('#page').val(1);
@@ -181,145 +186,41 @@ and open the template in the editor.
 //                    $('#page').change(render);
                     $('div.well.row.log').hide();
                 });
-                //--------------------------------------------------------------
-                // Got from online, need to change the variables around
-                var navigation_html = '<ul>';
-
-                navigation_html += '<li class="previous_link">';
-                navigation_html += '<a href="javascript:previous();">&larr; Previous</a>';
-                navigation_html += '</li>';
-                
-                var current_link = 1;
-                
-                while( 5 > current_link){ // Set to 5 until total pages can be calculated
-                        navigation_html += '<li class="page_link">';
-                        navigation_html += '<a href="javascript:go_to_page(' + current_link +')" longdesc="' + current_link +'">'+ (current_link) +'</a>';
-                        current_link++;
-                        navigation_html += '</li>';
-                }
-                navigation_html += '<li>';
-                navigation_html += '<a class="next_link" href="javascript:next();">Next &rarr;</a>';
-                navigation_html += '</li>';
-                navigation_html += '</ul>';
-                                
-                $('#pageNav').html(navigation_html);
-                //--------------------------------------------------------------
-                //--------------------------------------------------------------
-            });
-        
-        function makePaginate(page) {
-            var navigation_html = '<ul>';
-
-            navigation_html += '<li class="previous_link">';
-            navigation_html += '<a href="javascript:previous();">&larr; Previous</a>';
-            navigation_html += '</li>';
-
-            var current_link = page;
-
-            while( 5 > current_link){ // Set to 5 until total pages can be calculated
-                    navigation_html += '<li class="page_link">';
-                    navigation_html += '<a href="javascript:go_to_page(' + current_link +')" longdesc="' + current_link +'">'+ (current_link) +'</a>';
-                    current_link++;
-                    navigation_html += '</li>';
-            }
-            navigation_html += '<li>';
-            navigation_html += '<a class="next_link" href="javascript:next();">Next &rarr;</a>';
-            navigation_html += '</li>';
-            navigation_html += '</ul>';
-
-            $('#pageNav').html(navigation_html);
-            }
-        //----------------------------------------------------------------------
-        // Got from online, need to change the variables around
-        
-        function previous(){
-	
-            new_page = parseInt($('#current_page').val()) - 1;
-            //if there is an item before the current active link run the function
-//            if($('.active').prev('.page_link').length===true){
-//                    go_to_page(new_page);
-//            }	
-            if(new_page !== 0) {
-                go_to_page(new_page);
-            }
-        }
-
-        function next(){
-            new_page = parseInt($('#current_page').val()) + 1;
-                //if there is an item after the current active link run the function
-//                if($('.active').next('.page_link').length===true){
-//                        go_to_page(new_page);
-//                }
-            go_to_page(new_page);
-            if(new_page === lastPage){
-                makePaginate(new_page);
-            }
-        }
-        function go_to_page(pageNum){
-//                //get the number of items shown per page
-//                var show_per_page = parseInt($('#show_per_page').val());
-//
-//                //get the element number where to start the slice from
-//                start_from = page_num * show_per_page;
-//
-//                //get the element number where to end the slice
-//                end_on = start_from + show_per_page;
-//
-//                //hide all children elements of content div, get specific items and show them
-//                $('#content').children().css('display', 'none').slice(start_from, end_on).css('display', 'block');
-//
-//                /*get the page link that has longdesc attribute of the current page and add active class to it
-//                and remove that class from previously active page link*/
-//                $('.page_link[longdesc=' + page_num +']').addClass('active').siblings('li').removeClass('active');
-//
-//                //update the current page input field
-//                $('#current_page').val(page_num);
-            $.getJSON('jsonTest.json', function(logs) {
-                $('#target').html(rfn(logs));
-                $('#current_page').val(pageNum);
-            });
-        }
-        //----------------------------------------------------------------------
-        //----------------------------------------------------------------------
         </script>
-		<div class="container">
-			<div id="pageNav" class="pagination">
-<!--				<ul>
-					<li class="disabled"><a href="#">Prev</a></li>
-					<li class="active"><a href="#">1</a></li>
-                                        <li><a href="#">2</a></li>
-					<li><a href="#">3</a></li>
-					<li><a href="#">4</a></li>
-					<li><a href="#">Next</a></li>
-				</ul>-->
-			</div>
-<!--			<select id="page">
-				<option value="1">1</option>
-				<option value="2">2</option>
-				<option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-			</select>-->
+		<div class="container"><div id="target"></div></div>
+
+<!--    <a id="next" href="mobile2.json"></a>
+
+    <script>
 
 
-			<div id="target"></div>
-		</div>
+        //----------------------------------------------------------------------
+        //
+        //              Infinite scroll with JSON
+        //
+        //----------------------------------------------------------------------
 
-        <!-- TODO Add Footer element here -->
-        <!--<footer class="footer"><p>FRIB</p></footer>-->
-        <script>
-          $(function(){
-            /* */
-            $('div#content').infinitescroll({
+        var _renderItem = function(data) {
+        return "<p>Title :" + data.title + "</p>";
+        };
 
-              navSelector  : "a#next_link",            
-                             // selector for the paged navigation (it will be hidden)
-              nextSelector : "a#next_link",   
-                             // selector for the NEXT link (to page 2)
-              itemSelector : "div#logs log"          
-                             // selector for all items you'll retrieve
-            });
-        });
-          </script>
+
+        $('#content').infinitescroll({
+
+                navSelector : "a#next:last",
+                nextSelector : "a#next:last",
+                itemSelector : "#content p",
+                debug	: true,
+                dataType	: 'json',
+                appendCallback	: false, // USE FOR PREPENDING
+        }, function( response ) {
+            var jsonData = response.results;
+                        $theCntr = $("#content");
+                        for(var i=0;i<jsonData.length;i++) {
+                            var item = $(_renderItem(jsonData[i]));
+                            $theCntr.append(item);
+                        }
+                });
+    </script>-->
     </body>
 </html>
