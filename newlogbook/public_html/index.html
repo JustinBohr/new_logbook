@@ -1,0 +1,325 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/bootstrap-responsive.css" type="text/css"/>
+        <link rel="stylesheet" href="css/style.css" type="text/css"/>
+
+         <style type="text/css">
+            body {
+                padding-top: 60px;
+                padding-bottom: 40px;
+            }
+        </style>
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+          <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <title>Project Easel Demo</title>
+        <script src="js/jquery.js"></script>
+        <script src="js/bootstrap-transition.js"></script>
+        <script src="js/bootstrap-alert.js"></script>
+        <script src="js/bootstrap-modal.js"></script>
+        <script src="js/bootstrap-dropdown.js"></script>
+        <script src="js/bootstrap-scrollspy.js"></script>
+        <script src="js/bootstrap-tab.js"></script>
+        <script src="js/bootstrap-tooltip.js"></script>
+        <script src="js/bootstrap-popover.js"></script>
+        <script src="js/bootstrap-button.js"></script>
+        <script src="js/bootstrap-collapse.js"></script>
+        <script src="js/bootstrap-carousel.js"></script>
+        <script src="js/bootstrap-typeahead.js"></script>
+        <script src="js/pure_min.js"></script>
+        <script src="js/jquery.inifintescroll.js"></script>
+        
+    </head>
+    <body>
+        <input type='hidden' id='current_page' />
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="#">Logbook</a>
+                    <div class="btn-group pull-right">
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="icon-user"></i> Username
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Profile</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Sign Out</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-collapse">
+                        <ul class="nav">
+                            <li class="active"><a href="index.html">Home</a></li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                    <!-- The drop down menu -->
+                    <ul class="nav pull-right">
+                        <li class="divider-vertical"></li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
+                            <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+                                <form action="[ACTION]" method="post" accept-charset="UTF-8">
+                                    <input id="user_username" style="margin-bottom: 15px;" type="text" name="user[username]" size="30" />
+                                    <input id="user_password" style="margin-bottom: 15px;" type="password" name="user[password]" size="30" />
+                                    <input id="user_remember_me" style="float: left; margin-right: 10px;" type="checkbox" name="user[remember_me]" value="1" />
+                                    <label class="string optional" for="user_remember_me"> Remember me</label>
+                                    <input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--script type="text/rocketscript" data-rocketsrc="http://www.infinite-scroll.com/wp-content/plugins/infinite-scroll/jquery.infinitescroll.js"></script-->
+        <script>
+            $(function() {
+                // Setup drop down menu
+                $('.dropdown-toggle').dropdown();
+
+                // Fix input element click problem
+                $('.dropdown input, .dropdown label').click(function(e) {
+                    e.stopPropagation();
+                });
+            });
+			
+			//--------------------------------------------------
+			//	Format the date and time
+            var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            function printDate(unix) {
+                var temp = new Date(unix);
+                var dateStr = padStr(temp.getDate()) + ' ' +
+                        monthNames[temp.getMonth()] + ' ' +
+                        padStr(temp.getFullYear()) + ' ' +
+                        padStr(temp.getHours()) + ':' +
+                        padStr(temp.getMinutes()) + ':' +
+                        padStr(temp.getSeconds());
+                return dateStr;
+            }
+
+            function padStr(i) {
+                return (i < 10) ? "0" + i : "" + i;
+            }
+			//--------------------------------------------------
+            var directives = {
+                'div.log': {
+                    'log <- context': {
+                        '@class+': (function(arg) {
+                            return (arg.pos % 2 === 0) ? ' even' : ' odd';
+                        }),
+                        '.createdDate': function(arg) {
+                            return printDate(arg.item.createdDate);
+                        },
+                        '.owner': 'log.owner',
+                        '.logbook': {'logbook <- log.logbooks': {
+                                '.+': '#{logbook.name}, '
+                            }},
+                        '.tag': {'tag <- log.tags': {
+                                '.+': '#{tag.name}, '
+                            }},
+                        '.property': {'property <- log.properties': {
+                                '.+': '#{property.name}, '
+                            }},
+                        '.level': 'log.level',
+                        '.description': 'log.description',
+                    }
+                },
+            };
+
+            function render(pageNum) {
+//                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logs?limit=10', 'page=' + $('#page').val(), function(logs) {
+                $.getJSON('jsonTest.json', function(logs) {
+                    $('#target').append(rfn(logs));
+                    //$('#target').html(rfn(logs));
+                });
+            }
+//        $(window).scroll(function () { 
+//        if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
+////            $('#page').val(parseInt($('#page').val()) + 1);
+////            setTimeout(function(){
+//                pageNum += 1;
+//                render(pageNum);
+////            }, 500);
+//           }
+//        });
+
+        // infinitescroll() is called on the element that surrounds 
+        // the items you will be loading more of
+        
+            $(document).ready(function() {
+                $('#page').val(1);
+                $('#current_page').val(1);
+                pageNum = 1;
+                $.get('_logs.tmpl.html', function(templates) {
+                    // Inject templates.
+                    $('body').append(templates);
+                    rfn = $('#logs_tmpl').compile(directives);
+                    $.getJSON('jsonTest.json',function(logs) {
+                                          $('#target').append(rfn(logs));
+                    });
+//                    render();
+//                    $('#page').change(render);
+                    $('div.well.row.log').hide();
+                });
+                //--------------------------------------------------------------
+                // Got from online, need to change the variables around
+                var navigation_html = '<ul>';
+
+                navigation_html += '<li class="previous_link">';
+                navigation_html += '<a href="javascript:previous();">&larr; Previous</a>';
+                navigation_html += '</li>';
+                
+                var current_link = 1;
+                
+                while( 5 > current_link){ // Set to 5 until total pages can be calculated
+                        navigation_html += '<li class="page_link">';
+                        navigation_html += '<a href="javascript:go_to_page(' + current_link +')" longdesc="' + current_link +'">'+ (current_link) +'</a>';
+                        current_link++;
+                        navigation_html += '</li>';
+                }
+                navigation_html += '<li>';
+                navigation_html += '<a class="next_link" href="javascript:next();">Next &rarr;</a>';
+                navigation_html += '</li>';
+                navigation_html += '</ul>';
+                                
+                $('#pageNav').html(navigation_html);
+                //--------------------------------------------------------------
+                //--------------------------------------------------------------
+            });
+        
+        function makePaginate(page) {
+            var navigation_html = '<ul>';
+
+            navigation_html += '<li class="previous_link">';
+            navigation_html += '<a href="javascript:previous();">&larr; Previous</a>';
+            navigation_html += '</li>';
+
+            var current_link = page;
+
+            while( 5 > current_link){ // Set to 5 until total pages can be calculated
+                    navigation_html += '<li class="page_link">';
+                    navigation_html += '<a href="javascript:go_to_page(' + current_link +')" longdesc="' + current_link +'">'+ (current_link) +'</a>';
+                    current_link++;
+                    navigation_html += '</li>';
+            }
+            navigation_html += '<li>';
+            navigation_html += '<a class="next_link" href="javascript:next();">Next &rarr;</a>';
+            navigation_html += '</li>';
+            navigation_html += '</ul>';
+
+            $('#pageNav').html(navigation_html);
+            }
+        //----------------------------------------------------------------------
+        // Got from online, need to change the variables around
+        
+        function previous(){
+	
+            new_page = parseInt($('#current_page').val()) - 1;
+            //if there is an item before the current active link run the function
+//            if($('.active').prev('.page_link').length===true){
+//                    go_to_page(new_page);
+//            }	
+            if(new_page !== 0) {
+                go_to_page(new_page);
+            }
+        }
+
+        function next(){
+            new_page = parseInt($('#current_page').val()) + 1;
+                //if there is an item after the current active link run the function
+//                if($('.active').next('.page_link').length===true){
+//                        go_to_page(new_page);
+//                }
+            go_to_page(new_page);
+            if(new_page === lastPage){
+                makePaginate(new_page);
+            }
+        }
+        function go_to_page(pageNum){
+//                //get the number of items shown per page
+//                var show_per_page = parseInt($('#show_per_page').val());
+//
+//                //get the element number where to start the slice from
+//                start_from = page_num * show_per_page;
+//
+//                //get the element number where to end the slice
+//                end_on = start_from + show_per_page;
+//
+//                //hide all children elements of content div, get specific items and show them
+//                $('#content').children().css('display', 'none').slice(start_from, end_on).css('display', 'block');
+//
+//                /*get the page link that has longdesc attribute of the current page and add active class to it
+//                and remove that class from previously active page link*/
+//                $('.page_link[longdesc=' + page_num +']').addClass('active').siblings('li').removeClass('active');
+//
+//                //update the current page input field
+//                $('#current_page').val(page_num);
+            $.getJSON('jsonTest.json', function(logs) {
+                $('#target').html(rfn(logs));
+                $('#current_page').val(pageNum);
+            });
+        }
+        //----------------------------------------------------------------------
+        //----------------------------------------------------------------------
+        </script>
+		<div class="container">
+			<div id="pageNav" class="pagination">
+<!--				<ul>
+					<li class="disabled"><a href="#">Prev</a></li>
+					<li class="active"><a href="#">1</a></li>
+                                        <li><a href="#">2</a></li>
+					<li><a href="#">3</a></li>
+					<li><a href="#">4</a></li>
+					<li><a href="#">Next</a></li>
+				</ul>-->
+			</div>
+<!--			<select id="page">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+			</select>-->
+
+
+			<div id="target"></div>
+		</div>
+
+        <!-- TODO Add Footer element here -->
+        <!--<footer class="footer"><p>FRIB</p></footer>-->
+        <script>
+          $(function(){
+            /* */
+            $('div#content').infinitescroll({
+
+              navSelector  : "a#next_link",            
+                             // selector for the paged navigation (it will be hidden)
+              nextSelector : "a#next_link",   
+                             // selector for the NEXT link (to page 2)
+              itemSelector : "div#logs log"          
+                             // selector for all items you'll retrieve
+            });
+        });
+          </script>
+    </body>
+</html>
