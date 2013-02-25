@@ -26,7 +26,7 @@ and open the template in the editor.
           <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
 
-        <title>LogBook</title>
+        <title>Olog Logbook</title>
         <script src="js/jquery.js"></script>
         <script src="js/bootstrap-transition.js"></script>
         <script src="js/bootstrap-alert.js"></script>
@@ -188,49 +188,6 @@ and open the template in the editor.
                     $('div.well.row.log').hide();
                 });
             });
-            
-        //----------------------------------------------------------------------
-        //
-        //              Paste from clipboard
-        //
-        //----------------------------------------------------------------------
-            
-            document.getElementById("pastetest").focus();
-            document.body.addEventListener("paste", function(e) {
-                for (var i = 0; i < e.clipboardData.items.length; i++) {
-                    if (e.clipboardData.items[i].kind == "file" && e.clipboardData.items[i].type == "image/png") {
-                        // get the blob
-                        var imageFile = e.clipboardData.items[i].getAsFile();
-
-                        // read the blob as a data URL
-                        var fileReader = new FileReader();
-                        fileReader.onloadend = function(e) {
-                            // create an image
-                            var image = document.createElement("IMG");
-                            image.src = this.result;
-
-                            // insert the image
-                            var range = window.getSelection().getRangeAt(0);
-                            range.insertNode(image);
-                            range.collapse(false);
-
-                            // set the selection to after the image
-                            var selection = window.getSelection();
-                            selection.removeAllRanges();
-                            selection.addRange(range);
-                        };
-
-                        // TODO: Error Handling!
-                        // fileReader.onerror = ...
-                        fileReader.readAsDataURL(imageFile);
-                        // prevent the default paste action
-                        e.preventDefault();
-
-                        // only paste 1 image at a time
-                        break;
-                    }
-                }
-            }); 
         </script>
 		<div class="container"><div id="target"></div></div>
 
