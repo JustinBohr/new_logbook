@@ -14,7 +14,7 @@ and open the template in the editor.
         <link rel="stylesheet" href="css/bootstrap-responsive.css" type="text/css"/>
         <link rel="stylesheet" href="css/style.css" type="text/css"/>
 
-         <style type="text/css">
+        <style type="text/css">
             body {
                 padding-top: 60px;
                 padding-bottom: 40px;
@@ -41,11 +41,11 @@ and open the template in the editor.
         <script src="js/bootstrap-carousel.js"></script>
         <script src="js/bootstrap-typeahead.js"></script>
         <script src="js/pure_min.js"></script>
-        <script src="js/jquery.inifintescroll.js"></script>
-        
+        <script src="js/bootstrap-filestyle-0.1.0.min.js"></script>
+        <!--    <script src="js/jquery.infinitescroll.js"></script> -->
+
     </head>
     <body>
-        <input type='hidden' id='current_page' />
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
@@ -77,7 +77,7 @@ and open the template in the editor.
                         <li class="dropdown">
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
                             <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-                                <form action="[ACTION]" method="post" accept-charset="UTF-8">
+                                <form action="POST" method="post" accept-charset="UTF-8">
                                     <input id="user_username" style="margin-bottom: 15px;" type="text" name="user[username]" size="30" />
                                     <input id="user_password" style="margin-bottom: 15px;" type="password" name="user[password]" size="30" />
                                     <input id="user_remember_me" style="float: left; margin-right: 10px;" type="checkbox" name="user[remember_me]" value="1" />
@@ -94,15 +94,27 @@ and open the template in the editor.
             $(function() {
                 // Setup drop down menu
                 $('.dropdown-toggle').dropdown();
-
                 // Fix input element click problem
                 $('.dropdown input, .dropdown label').click(function(e) {
                     e.stopPropagation();
                 });
             });
-			
-			//--------------------------------------------------
-			//	Format the date and time
+            //----------------------------------------------------------------------
+            //
+            //              On hover show actions buttons in bottom right
+            //
+            //----------------------------------------------------------------------    
+            $(document).ready(function() {
+                $('div[id^="log_"]').hover(
+                        function() { // Hover in
+                            $(this).find('.action_buttons').show();
+                        },
+                        function() { // Hover out
+                            $(this).find('.action_buttons').hide();
+                        });
+            });
+            //--------------------------------------------------
+            //	Format the date and time
             var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
             function printDate(unix) {
@@ -120,11 +132,11 @@ and open the template in the editor.
                 return (i < 10) ? "0" + i : "" + i;
             }
 
-        //----------------------------------------------------------------------
-        //
-        //              Directives
-        //
-        //----------------------------------------------------------------------
+            //----------------------------------------------------------------------
+            //
+            //              Directives
+            //
+            //----------------------------------------------------------------------
 
             var directives = {
                 'div.log': {
@@ -134,6 +146,12 @@ and open the template in the editor.
                         }),
                         '.createdDate': function(arg) {
                             return printDate(arg.item.createdDate);
+                        },
+                        '.id@id': function(arg) {
+                            return 'log_' + arg.item.id;
+                        },
+                        '.open-edit@data-id': function(arg) {
+                            return arg.item.id;
                         },
                         '.owner': 'log.owner',
                         '.logbook': {'logbook <- log.logbooks': {
@@ -150,13 +168,12 @@ and open the template in the editor.
                     }
                 },
             };
-        
-        //----------------------------------------------------------------------
-        //
-        //              Render function
-        //
-        //----------------------------------------------------------------------
-        
+            //----------------------------------------------------------------------
+            //
+            //              Render function
+            //
+            //----------------------------------------------------------------------
+
 
             function render(pageNum) {
 //                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logs?limit=10', 'page=' + $('#page').val(), function(logs) {
@@ -165,13 +182,13 @@ and open the template in the editor.
                     //$('#target').html(rfn(logs));
                 });
             }
-        
-        //----------------------------------------------------------------------
-        //
-        //              Document ready
-        //
-        //----------------------------------------------------------------------
-        
+
+            //----------------------------------------------------------------------
+            //
+            //              Document ready
+            //
+            //----------------------------------------------------------------------
+
             $(document).ready(function() {
                 $('#page').val(1);
                 $('#current_page').val(1);
@@ -180,94 +197,184 @@ and open the template in the editor.
                     // Inject templates.
                     $('body').append(templates);
                     rfn = $('#logs_tmpl').compile(directives);
-                    $.getJSON('jsonTest.json',function(logs) {
-                                          $('#target').append(rfn(logs));
+                    $.getJSON('jsonTest.json', function(logs) {
+                        $('#target').append(rfn(logs));
+                        $(":file").filestyle({
+                            icon: true,
+                            classIcon: "icon-picture",
+                            showFilename: false,
+                            classButton: "btn",
+                            buttonText: "",
+                            textField: false
+                        });
+                        $('div[id^="log_"]').hover(
+                                function() { // Hover in
+                                    $(this).find('.action_buttons').show();
+                                },
+                                function() { // Hover out
+                                    $(this).find('.action_buttons').hide();
+                                });
                     });
 //                    render();
 //                    $('#page').change(render);
                     $('div.well.row.log').hide();
                 });
             });
-            
-            
-        //----------------------------------------------------------------------
-        //
-        //              Paste image from clipboard
-        //
-        //----------------------------------------------------------------------
-            document.getElementById("pastetest").focus();
-            document.body.addEventListener("paste", function(e) {
-                for (var i = 0; i < e.clipboardData.items.length; i++) {
-                    if (e.clipboardData.items[i].kind == "file" && e.clipboardData.items[i].type == "image/png") {
-                        // get the blob
-                        var imageFile = e.clipboardData.items[i].getAsFile();
+            //----------------------------------------------------------------------
+            //
+            //              Paste image from clipboard
+            //
+            //----------------------------------------------------------------------
 
-                        // read the blob as a data URL
-                        var fileReader = new FileReader();
-                        fileReader.onloadend = function(e) {
-                            // create an image
-                            var image = document.createElement("IMG");
-                            image.src = this.result;
+//            document.body.addEventListener("paste", function(e) {
+//                for (var i = 0; i < e.clipboardData.items.length; i++) {
+//                    if (e.clipboardData.items[i].kind === "file" && e.clipboardData.items[i].type === "image/png") {
+//                        // get the blob
+//                        var imageFile = e.clipboardData.items[i].getAsFile();
+//
+//                        // read the blob as a data URL
+//                        var fileReader = new FileReader();
+//                        fileReader.onloadend = function(e) {
+//                            // create an image
+//                            var image = document.createElement("IMG");
+//                            image.src = this.result;
+//
+//                            // insert the image
+//                            var range = window.getSelection().getRangeAt(0);
+//                            range.insertNode(image);
+//                            range.collapse(false);
+//
+//                            // set the selection to after the image
+//                            var selection = window.getSelection();
+//                            selection.removeAllRanges();
+//                            selection.addRange(range);
+//                        };
+//
+//                        // TODO: Error Handling!
+//                        // fileReader.onerror = ...
+//                        fileReader.readAsDataURL(imageFile);
+//
+//                        // prevent the default paste action
+//                        e.preventDefault();
+//
+//                        // only paste 1 image at a time
+//                        break;
+//                    }
+//                }
+//            });
+//            
+            //----------------------------------------------------------------------
+            //
+            //              Load info into edit modal
+            //
+            //----------------------------------------------------------------------
+            $(document).on("click", ".open-edit", function() {
+                var myLogId = $(this).data('id');
+                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logs/' + myLogId, function(log) {
+                    // $(".modal-body #description").val(log.description);
+                    //$('#edit').modal('show');
+                    //$('#target').html(rfn(logs));
+                });
+            });
 
-                            // insert the image
-                            var range = window.getSelection().getRangeAt(0);
-                            range.insertNode(image);
-                            range.collapse(false);
+//            
 
-                            // set the selection to after the image
-                            var selection = window.getSelection();
-                            selection.removeAllRanges();
-                            selection.addRange(range);
-                        };
 
-                        // TODO: Error Handling!
-                        // fileReader.onerror = ...
-                        fileReader.readAsDataURL(imageFile);
 
-                        // prevent the default paste action
-                        e.preventDefault();
+            $('.edit_log').click(function() {
+                $('#logForm').show('fast');
+                $('#addNewLog').hide();
+                $('#closeNewLog').show();
+                $.getJSON(this.title);
+            });
 
-                        // only paste 1 image at a time
-                        break;
-                    }
-                }
-            }); 
+
 
         </script>
-		<div class="container"><div id="target"></div></div>
+        <div class="container"><div id="target"></div></div>
 
-<!--    <a id="next" href="mobile2.json"></a>
+        <!--    <a id="next" href="mobile2.json"></a>
+        
+            <script>
+        
+        
+                //----------------------------------------------------------------------
+                //
+                //              Infinite scroll with JSON
+                //
+                //----------------------------------------------------------------------
+        
+                var _renderItem = function(data) {
+                return "<p>Title :" + data.title + "</p>";
+                };
+        
+        
+                $('#content').infinitescroll({
+        
+                        navSelector : "a#next:last",
+                        nextSelector : "a#next:last",
+                        itemSelector : "#content p",
+                        debug	: true,
+                        dataType	: 'json',
+                        appendCallback	: false, // USE FOR PREPENDING
+                }, function( response ) {
+                    var jsonData = response.results;
+                                $theCntr = $("#content");
+                                for(var i=0;i<jsonData.length;i++) {
+                                    var item = $(_renderItem(jsonData[i]));
+                                    $theCntr.append(item);
+                                }
+                        });
+            </script>-->
+        <div id="edit" class="modal hide fade in bigModal" style="display: none; ">
+            <div class="bigModal-header span7">
+                <a class="close" data-dismiss="modal">x</a>
+                <h3>Edit Log</h3>
+            </div>
+            <div class="row">
+                <div class="modal-body span8">
+                    <div class="span2">
+                        <select class="span2" multiple="multiple">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                        </select>
+                    </div>
+                    <div class="span2">
+                        <select class="offset1 span2" multiple="multiple">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                        </select>
+                    </div>
+                    <textarea class="input-block-level" id="description" rows="12" style="resize: none;"></textarea>
+                </div>
+            </div>
 
-    <script>
-
-
-        //----------------------------------------------------------------------
-        //
-        //              Infinite scroll with JSON
-        //
-        //----------------------------------------------------------------------
-
-        var _renderItem = function(data) {
-        return "<p>Title :" + data.title + "</p>";
-        };
-
-
-        $('#content').infinitescroll({
-
-                navSelector : "a#next:last",
-                nextSelector : "a#next:last",
-                itemSelector : "#content p",
-                debug	: true,
-                dataType	: 'json',
-                appendCallback	: false, // USE FOR PREPENDING
-        }, function( response ) {
-            var jsonData = response.results;
-                        $theCntr = $("#content");
-                        for(var i=0;i<jsonData.length;i++) {
-                            var item = $(_renderItem(jsonData[i]));
-                            $theCntr.append(item);
-                        }
-                });
-    </script>-->
+            <div class="modal-footer">
+                <a href="#" class="btn btn-success">Call to action</a>
+                <a href="#" class="btn" data-dismiss="modal">Close</a>
+            </div>
+        </div>
+        <div id="paste" class="modal hide fade in" style="display: none; ">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">x</a>
+                <h3>This is a Modal Heading</h3>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="description" value =""/>	        
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-success">Call to action</a>
+                <a href="#" class="btn" data-dismiss="modal">Close</a>
+            </div>
+        </div>
     </body>
+
 </html>

@@ -16,6 +16,17 @@
     width: 100px;
     height: 100px;
 }
+.bigModal {
+    width:800px;
+    margin-left:-370px;
+}
+
+.bigModal-header{
+    margin: 0px;
+    width: 770px;
+    padding: 9px 15px;
+    border-bottom: 1px solid #eee;
+}
 
 .fancy {
     font-family: sans-serif;

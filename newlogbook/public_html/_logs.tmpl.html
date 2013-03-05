@@ -1,7 +1,7 @@
 <!--  Logs iterating template -->
 <div class="logs" id="logs_tmpl" >
     <div class="well row log">
-        <div class="span12">
+        <div class="span12 id" >
             <div class="span2 createdDate"></div>
             <div class="span1 level"></div>
             <div class="span3 offset5 pull-right">
@@ -24,13 +24,30 @@
                     <span class="property name"></span>
 
                 </div>
+
             </div>
             <div class="row">
                 <blockquote class="span5">
                     <p class="description"></p>
                     <small class="owner"></small>
                 </blockquote>
-            </div>
+                <div class="row">
+                    <div class="span3 offset3 pull-right" style="bottom: 0">
+                        <div class="action_buttons" style="display: none; bottom: 0"><label>actions</label>
+                            <form class="span1" style='margin: 0px; width: 40px; padding: 0px' action="localhost" method="POST" enctype="multipart/form-data">
+                                <input type="file" name="file" id="fileItem">
+                                <input type="hidden" name="id" value="" />
+                            </form>
+                            <a class="open-edit btn" title="edit log" data-id="" data-toggle="modal" href="#edit">
+                                <i class="icon-edit" ></i>
+                            </a>
+                            <a class="open-paste btn" title="paste from clipboard" data-id="" data-toggle="modal" href="#paste">
+                                <i class="icon-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div> 
         </div>
     </div><!--/row-->
 </div><!--/table-->
