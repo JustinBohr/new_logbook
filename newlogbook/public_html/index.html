@@ -220,49 +220,52 @@ and open the template in the editor.
                     $('div.well.row.log').hide();
                 });
             });
+            
+            
             //----------------------------------------------------------------------
             //
             //              Paste image from clipboard
             //
             //----------------------------------------------------------------------
 
-//            document.body.addEventListener("paste", function(e) {
-//                for (var i = 0; i < e.clipboardData.items.length; i++) {
-//                    if (e.clipboardData.items[i].kind === "file" && e.clipboardData.items[i].type === "image/png") {
-//                        // get the blob
-//                        var imageFile = e.clipboardData.items[i].getAsFile();
-//
-//                        // read the blob as a data URL
-//                        var fileReader = new FileReader();
-//                        fileReader.onloadend = function(e) {
-//                            // create an image
-//                            var image = document.createElement("IMG");
-//                            image.src = this.result;
-//
-//                            // insert the image
-//                            var range = window.getSelection().getRangeAt(0);
-//                            range.insertNode(image);
-//                            range.collapse(false);
-//
-//                            // set the selection to after the image
-//                            var selection = window.getSelection();
-//                            selection.removeAllRanges();
-//                            selection.addRange(range);
-//                        };
-//
-//                        // TODO: Error Handling!
-//                        // fileReader.onerror = ...
-//                        fileReader.readAsDataURL(imageFile);
-//
-//                        // prevent the default paste action
-//                        e.preventDefault();
-//
-//                        // only paste 1 image at a time
-//                        break;
-//                    }
-//                }
-//            });
-//            
+            document.body.addEventListener("paste", function(e) {
+                for (var i = 0; i < e.clipboardData.items.length; i++) {
+                    if (e.clipboardData.items[i].kind === "file" && e.clipboardData.items[i].type === "image/png") {
+                        // get the blob
+                        var imageFile = e.clipboardData.items[i].getAsFile();
+
+                        // read the blob as a data URL
+                        var fileReader = new FileReader();
+                        fileReader.onloadend = function(e) {
+                            // create an image
+                            var image = document.createElement("IMG");
+                            image.src = this.result;
+
+                            // insert the image
+                            var range = window.getSelection().getRangeAt(0);
+                            range.insertNode(image);
+                            range.collapse(false);
+
+                            // set the selection to after the image
+                            var selection = window.getSelection();
+                            selection.removeAllRanges();
+                            selection.addRange(range);
+                        };
+
+                        // TODO: Error Handling!
+                        // fileReader.onerror = ...
+
+                        fileReader.readAsDataURL(imageFile);
+
+                        // prevent the default paste action
+                        e.preventDefault();
+
+                        // only paste 1 image at a time
+                        break;
+                    }
+                }
+            });
+
             //----------------------------------------------------------------------
             //
             //              Load info into edit modal
@@ -271,7 +274,7 @@ and open the template in the editor.
             $(document).on("click", ".open-edit", function() {
                 var myLogId = $(this).data('id');
                 $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logs/' + myLogId, function(log) {
-                    // $(".modal-body #description").val(log.description);
+                    $(".modal-body #description").val(log.description);
                     //$('#edit').modal('show');
                     //$('#target').html(rfn(logs));
                 });
@@ -287,6 +290,20 @@ and open the template in the editor.
                 $('#closeNewLog').show();
                 $.getJSON(this.title);
             });
+
+
+            //----------------------------------------------------------------------
+            //
+            //              TODO: Fill in selects for edit modal
+            //
+            //----------------------------------------------------------------------
+//            window.onload = fillSelectBook();
+//
+//            function fillSelectBook() {
+//                var ddl = document.getElementById('book');
+//                var theOption = new Option;
+//
+//            }
 
 
 
@@ -333,46 +350,54 @@ and open the template in the editor.
             </div>
             <div class="row">
                 <div class="modal-body span8">
-                    <div class="span2">
-                        <select class="span2" multiple="multiple">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>6</option>
-                        </select>
+                    <div class="row">
+                        <div class="span2"><label>Book</label>
+                            <select id="book" class="span2" multiple="multiple">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                            </select>
+                        </div>
+                        <div class="span2"><label>Tag</label>
+                            <select id="tag" class="offset1 span2" multiple="multiple">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="span2">
-                        <select class="offset1 span2" multiple="multiple">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>6</option>
-                        </select>
+                    <div class="row">
+                        <div class="span8"><label>Description</label>
+                            <textarea class="input-block-level" id="description" rows="10" style="resize: none;"></textarea>
+                        </div>
                     </div>
-                    <textarea class="input-block-level" id="description" rows="12" style="resize: none;"></textarea>
                 </div>
             </div>
 
             <div class="modal-footer">
-                <a href="#" class="btn btn-success">Call to action</a>
-                <a href="#" class="btn" data-dismiss="modal">Close</a>
+                <a href="#" class="btn btn-success">Submit</a>
             </div>
         </div>
-        <div id="paste" class="modal hide fade in" style="display: none; ">
+        <div id="add" class="modal hide fade in" style="display: none; ">
             <div class="modal-header">
                 <a class="close" data-dismiss="modal">x</a>
-                <h3>This is a Modal Heading</h3>
+                <h3>Add Attachment</h3>
             </div>
             <div class="modal-body">
-                <input type="text" id="description" value =""/>	        
+                <div class="span4" id="container" contenteditable="true"></div>
             </div>
             <div class="modal-footer">
+                <form class="span1" style='margin: 0px; width: 40px; padding: 0px' action="localhost" method="POST" enctype="multipart/form-data">
+                    <input type="file" name="file" id="fileItem">
+                    <input type="hidden" name="id" value="" />
+                </form>
                 <a href="#" class="btn btn-success">Call to action</a>
-                <a href="#" class="btn" data-dismiss="modal">Close</a>
             </div>
         </div>
     </body>
