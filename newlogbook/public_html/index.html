@@ -165,6 +165,12 @@ and open the template in the editor.
                             }},
                         '.level': 'log.level',
                         '.description': 'log.description',
+                        //
+                        //Trying to get attachments to be filled in
+                        //
+                        //'.attachments@src':{'attachments<-log.attachments':{
+                        //        'img@src':'#{attachment.name},'
+                        //}}
                     }
                 },
             };
@@ -220,8 +226,8 @@ and open the template in the editor.
                     $('div.well.row.log').hide();
                 });
             });
-            
-            
+
+
             //----------------------------------------------------------------------
             //
             //              Paste image from clipboard
@@ -390,7 +396,7 @@ and open the template in the editor.
                 <h3>Add Attachment</h3>
             </div>
             <div class="modal-body">
-                <div class="span4" id="container" contenteditable="true"></div>
+                <div class="span4" contenteditable="true"></div>
             </div>
             <div class="modal-footer">
                 <form class="span1" style='margin: 0px; width: 40px; padding: 0px' action="localhost" method="POST" enctype="multipart/form-data">
