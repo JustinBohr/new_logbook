@@ -314,7 +314,7 @@ and open the template in the editor.
                     //$('#edit').modal('show');
                     //$('#target').html(rfn(logs));
                 });
-                fillSelectBook();
+                fillSelectBook(myLogId);
             });
 
 //            
@@ -336,9 +336,8 @@ and open the template in the editor.
             //----------------------------------------------------------------------
             //window.onload = fillSelectBook();
 
-            function fillSelectBook() {
-                var logID = $(this).data('id');
-                var tagList = $('.tag.name', '#log_3674');
+            function fillSelectBook(logID) {
+                var tagList = $('.tag.name', '#log_'+logID);
                 var select = document.getElementById('tag');
                 
                 for (var i = 0; i < tagList.length; i++) {
