@@ -42,7 +42,12 @@ and open the template in the editor.
         <script src="js/bootstrap-typeahead.js"></script>
         <script src="js/pure_min.js"></script>
         <script src="js/bootstrap-filestyle-0.1.0.min.js"></script>
+        <script src="/path/to/jquery.masonry.min.js"></script>
         <!--    <script src="js/jquery.infinitescroll.js"></script> -->
+
+        <script>serviceurl = "http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/";</script>
+
+
 
     </head>
     <body>
@@ -167,10 +172,26 @@ and open the template in the editor.
                         '.description': 'log.description',
                         //
                         //Trying to get attachments to be filled in
-                        //
-                        //'.attachments@src':{'attachments<-log.attachments':{
-                        //        'img@src':'#{attachment.name},'
-                        //}}
+
+                        '.attachments': {'attachment<-log.attachments': {
+                                '.attachment@href': function(a) {
+                                    return serviceurl + 'attachments/' + a.log.item.id + '/' + a.item.fileName;
+                                },
+                                'img@src': function(a) {
+                                    if (a.item.thumbnail) {
+                                        return serviceurl + 'attachments/' + a.log.item.id + '/' + a.item.fileName + ':thumbnail';
+                                    } else {
+                                        return null;
+                                    }
+                                },
+                                '.nonImage': function(a) {
+                                    if (!a.item.thumbnail) {
+                                        return a.item.fileName;
+                                    } else {
+                                        return null;
+                                    }
+                                }
+                            }}
                     }
                 },
             };
@@ -226,6 +247,15 @@ and open the template in the editor.
                     $('div.well.row.log').hide();
                 });
             });
+
+
+//            var $container = $('.attachments');
+//
+//            $container.imagesLoaded(function() {
+//                $container.masonry({
+//                    itemSelector: '.attachment'
+//                });
+//            });
 
 
             //----------------------------------------------------------------------
