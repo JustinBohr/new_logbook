@@ -163,7 +163,7 @@ and open the template in the editor.
                                 '.+': '#{logbook.name}, '
                             }},
                         '.tag': {'tag <- log.tags': {
-                                '.+': '#{tag.name}, '
+                                '.+': '#{tag.name} '
                             }},
                         '.property': {'property <- log.properties': {
                                 '.+': '#{property.name}, '
@@ -314,6 +314,7 @@ and open the template in the editor.
                     //$('#edit').modal('show');
                     //$('#target').html(rfn(logs));
                 });
+                fillSelectBook();
             });
 
 //            
@@ -333,13 +334,27 @@ and open the template in the editor.
             //              TODO: Fill in selects for edit modal
             //
             //----------------------------------------------------------------------
-//            window.onload = fillSelectBook();
-//
-//            function fillSelectBook() {
-//                var ddl = document.getElementById('book');
-//                var theOption = new Option;
-//
-//            }
+            //window.onload = fillSelectBook();
+
+            function fillSelectBook() {
+                var logID = $(this).data('id');
+                var tagList = $('.tag.name', '#log_3674');
+                var select = document.getElementById('tag');
+                
+                for (var i = 0; i < tagList.length; i++) {
+                    var item = tagList[i].innerHTML;
+                    var el = document.createElement('option');
+                    el.textContent = item;
+                    el.value = item;
+                    select.appendChild(el);
+                }
+                
+                
+                //var tags = $(logID + '.tag.name').map(function () { return $(this).text(); });
+                //var ddl = document.getElementById('tag name');
+                //var theOption = new Option;
+
+            }
 
 
 
@@ -389,22 +404,10 @@ and open the template in the editor.
                     <div class="row">
                         <div class="span2"><label>Book</label>
                             <select id="book" class="span2" multiple="multiple">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
                             </select>
                         </div>
                         <div class="span2"><label>Tag</label>
                             <select id="tag" class="offset1 span2" multiple="multiple">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
                             </select>
                         </div>
                     </div>
