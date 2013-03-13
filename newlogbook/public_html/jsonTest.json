@@ -239,7 +239,7 @@
                 "logs":null,
                 "state":"Active"}],
         
-        "tags":[],
+        "tags":["test0","test1","test2","test3"],
         "properties":
                 
                 [{"id":3,
