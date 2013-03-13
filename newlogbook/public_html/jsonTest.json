@@ -239,7 +239,13 @@
                 "logs":null,
                 "state":"Active"}],
         
-        "tags":["test0","test1","test2","test3"],
+        "tags":[{"id":0,
+                "groupingNum":0,
+                "name":"test0"},
+                {"id":1,
+                "groupingNum":1,
+                "name":"test1"
+                }],
         "properties":
                 
                 [{"id":3,
