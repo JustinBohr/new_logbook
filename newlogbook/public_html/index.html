@@ -224,8 +224,9 @@ and open the template in the editor.
                     // Inject templates.
                     $('body').append(templates);
                     rfn = $('#logs_tmpl').compile(directives);
-                    $.getJSON('jsonTest.json', function(logs) {
+                    $.getJSON('https://controls.frib.msu.edu/olog/resources/logs?limit=30', 'page=1', function(logs) {
                         $('#target').append(rfn(logs));
+                        $('#target').html(rfn(logs));
                         $(":file").filestyle({
                             icon: true,
                             classIcon: "icon-picture",
@@ -250,7 +251,8 @@ and open the template in the editor.
                 // - - - - - - - -
                 // Tags
                 // - - - - - - - -
-                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/tags/', function(tags) {
+//                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/tags/', function(tags) {
+                $.getJSON('https://controls.frib.msu.edu/olog/resources/tags/', function(tags) {
                     $.each(tags.tag, function(i,item) {
                         $('.modal-body #tag').append($('<option>').text(item.name));
                     });
@@ -259,8 +261,9 @@ and open the template in the editor.
                 // - - - - - - - -
                 // Books
                 // - - - - - - - -
-                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logbooks/', function(books) {
-                    $.each(books.logbook, function(i,item) {
+//                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logbooks/', function(tags) {
+                $.getJSON('https://controls.frib.msu.edu/olog/resources/logbooks/', function(books) {
+                      $.each(books.logbook, function(i,item) {
                         $('.modal-body #book').append($('<option>').text(item.name));
                     });
                 });
@@ -331,7 +334,8 @@ and open the template in the editor.
                 // - - - - - - - -
                 // Description
                 // - - - - - - - -
-                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logs/' + myLogId, function(log) {
+//                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logs/' + myLogId, function(log) {
+                $.getJson('https://controls.frib.msu.edu/olog/resources/logs/' + myLogId, function(log) {
                     $(".modal-body #description").val(log.description);
                     //$('#edit').modal('show');
                     //$('#target').html(rfn(logs));
