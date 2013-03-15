@@ -45,7 +45,7 @@ and open the template in the editor.
         <script src="/path/to/jquery.masonry.min.js"></script>
         <!--    <script src="js/jquery.infinitescroll.js"></script> -->
 
-        <script>serviceurl = "http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/";</script>
+        <script>serviceurl = "https://controls.frib.msu.edu/olog/resources/";</script>
 
 
 
@@ -202,13 +202,13 @@ and open the template in the editor.
             //----------------------------------------------------------------------
 
 
-            function render(pageNum) {
-//                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logs?limit=10', 'page=' + $('#page').val(), function(logs) {
-                $.getJSON('jsonTest.json', function(logs) {
-                    $('#target').append(rfn(logs));
-                    //$('#target').html(rfn(logs));
-                });
-            }
+//            function render(pageNum) {
+////                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logs?limit=10', 'page=' + $('#page').val(), function(logs) {
+//                $.getJSON('jsonTest.json', function(logs) {
+//                    $('#target').append(rfn(logs));
+//                    //$('#target').html(rfn(logs));
+//                });
+//            }
 
             //----------------------------------------------------------------------
             //
@@ -224,7 +224,7 @@ and open the template in the editor.
                     // Inject templates.
                     $('body').append(templates);
                     rfn = $('#logs_tmpl').compile(directives);
-                    $.getJSON('https://controls.frib.msu.edu/olog/resources/logs?limit=30', 'page=1', function(logs) {
+                    $.getJSON(serviceurl+'logs?limit=30&page=1', function(logs) {
                         $('#target').append(rfn(logs));
                         $('#target').html(rfn(logs));
                         $(":file").filestyle({
@@ -252,7 +252,7 @@ and open the template in the editor.
                 // Tags
                 // - - - - - - - -
 //                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/tags/', function(tags) {
-                $.getJSON('https://controls.frib.msu.edu/olog/resources/tags/', function(tags) {
+                $.getJSON(serviceurl+'tags/', function(tags) {
                     $.each(tags.tag, function(i,item) {
                         $('.modal-body #tag').append($('<option>').text(item.name));
                     });
@@ -262,7 +262,7 @@ and open the template in the editor.
                 // Books
                 // - - - - - - - -
 //                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logbooks/', function(tags) {
-                $.getJSON('https://controls.frib.msu.edu/olog/resources/logbooks/', function(books) {
+                $.getJSON(serviceurl+'logbooks/', function(books) {
                       $.each(books.logbook, function(i,item) {
                         $('.modal-body #book').append($('<option>').text(item.name));
                     });
@@ -335,7 +335,7 @@ and open the template in the editor.
                 // Description
                 // - - - - - - - -
 //                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logs/' + myLogId, function(log) {
-                $.getJson('https://controls.frib.msu.edu/olog/resources/logs/' + myLogId, function(log) {
+                $.getJson(serviceurl+'logs/' + myLogId, function(log) {
                     $(".modal-body #description").val(log.description);
                     //$('#edit').modal('show');
                     //$('#target').html(rfn(logs));
