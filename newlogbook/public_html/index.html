@@ -335,10 +335,9 @@ and open the template in the editor.
                 // Description
                 // - - - - - - - -
 //                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logs/' + myLogId, function(log) {
-                $.getJson(serviceurl+'logs/' + myLogId, function(log) {
+                $.getJSON(serviceurl+'logs/' + myLogId, function(log) {
                     $(".modal-body #description").val(log.description);
-                    //$('#edit').modal('show');
-                    //$('#target').html(rfn(logs));
+                    console.log(log);
                 });
             
                 fillSelectBook(myLogId);
