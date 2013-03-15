@@ -314,6 +314,11 @@ and open the template in the editor.
                     //$('#edit').modal('show');
                     //$('#target').html(rfn(logs));
                 });
+                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/tags/', function(tags) {
+                    $.each(tags.tag, function(i,item) {
+                        $('.modal-body #tag').append($('<option>').text(item.name));
+                    });
+                });
                 fillSelectBook(myLogId);
             });
 
@@ -337,16 +342,16 @@ and open the template in the editor.
             //window.onload = fillSelectBook();
 
             function fillSelectBook(logID) {
-                var tagList = $('.tag.name', '#log_'+logID);
-                var select = document.getElementById('tag');
-                
-                for (var i = 0; i < tagList.length; i++) {
-                    var item = tagList[i].innerHTML;
-                    var el = document.createElement('option');
-                    el.textContent = item;
-                    el.value = item;
-                    select.appendChild(el);
-                }
+//                var tagList = $('.tag.name', '#log_'+logID);
+//                var select = document.getElementById('tag');
+//                
+//                for (var i = 0; i < tagList.length; i++) {
+//                    var item = tagList[i].innerHTML;
+//                    var el = document.createElement('option');
+//                    el.textContent = item;
+//                    el.value = item;
+//                    select.appendChild(el);
+//                }
                 
                 
                 //var tags = $(logID + '.tag.name').map(function () { return $(this).text(); });
