@@ -337,7 +337,6 @@ and open the template in the editor.
 //                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logs/' + myLogId, function(log) {
                 $.getJSON(serviceurl+'logs/' + myLogId, function(log) {
                     $(".modal-body #description").val(log.description);
-                    console.log(log);
                 });
             
                 fillSelectBook(myLogId);
