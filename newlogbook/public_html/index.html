@@ -42,7 +42,7 @@ and open the template in the editor.
         <script src="js/bootstrap-typeahead.js"></script>
         <script src="js/pure_min.js"></script>
         <script src="js/bootstrap-filestyle-0.1.0.min.js"></script>
-        <script src="/path/to/jquery.masonry.min.js"></script>
+        <script src="js/jquery.masonry.min.js"></script>
         <!--    <script src="js/jquery.infinitescroll.js"></script> -->
 
         <script>serviceurl = "https://controls.frib.msu.edu/olog/resources/";</script>
@@ -193,7 +193,7 @@ and open the template in the editor.
                                 }
                             }}
                     }
-                },
+                }
             };
             //----------------------------------------------------------------------
             //
@@ -338,7 +338,16 @@ and open the template in the editor.
                 $.getJSON(serviceurl+'logs/' + myLogId, function(log) {
                     $(".modal-body #description").val(log.description);
                 });
-            
+                
+                // - - - - - - - -
+                // Attachemtns
+                // - - - - - - - -
+//                $.getJSON(serviceurl+'attachments/' + myLogId, function(a) {
+//                    $.each(a.attachment, function(i,item) {
+//                        $('.modal-body #attachments').append($('<option>').text(item.name));
+//                    });
+//                });
+                
                 fillSelectBook(myLogId);
             });
 
@@ -364,6 +373,20 @@ and open the template in the editor.
             function fillSelectBook(logID) {
 
             }
+
+            //----------------------------------------------------------------------
+            //
+            //              Masonry for images
+            //
+            //----------------------------------------------------------------------
+            var $container = $('#container');
+            
+            $container.imagesLoaded( function(){
+                $container.masonry({
+                    itemSelector : '.attachments'
+                 });
+             });
+
 
 
 
