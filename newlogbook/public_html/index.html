@@ -327,7 +327,12 @@ and open the template in the editor.
             //
             //----------------------------------------------------------------------
             $(document).on("click", ".open-edit", function() {
-                var myLogId = $(this).data('id');            
+                var myLogId = $(this).data('id');
+                
+                // removes the selected attribute
+                $('option').each(function(opt) {
+                    $(this).attr('selected',false);
+                });
                 // - - - - - - - - - - - -
                 // Description/tags/books
                 // - - - - - - - - - - - -
@@ -341,7 +346,7 @@ and open the template in the editor.
                     });
                     // Select books
                     $.each(log.logbooks, function(i,item) {
-                        $('.modal-body #book').find('[value="'+item.name+'"]').attr('selected', 'selected').attr('id','active');
+                        $('.modal-body #book').find('[value="'+item.name+'"]').attr('selected', 'selected');
                     });
                 });
                 
