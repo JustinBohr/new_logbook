@@ -247,24 +247,22 @@ and open the template in the editor.
 //                    $('#page').change(render);
                     $('div.well.row.log').hide();
                 });
-                
                 // - - - - - - - -
-                // Tags
+                // Tags list
                 // - - - - - - - -
 //                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/tags/', function(tags) {
                 $.getJSON(serviceurl+'tags/', function(tags) {
                     $.each(tags.tag, function(i,item) {
-                        $('.modal-body #tag').append($('<option>').text(item.name));
+                        $('.modal-body #tag').append($('<option value="'+item.name+'">').text(item.name));
                     });
-                });
-            
+                });                
                 // - - - - - - - -
-                // Books
+                // Books list
                 // - - - - - - - -
 //                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logbooks/', function(tags) {
                 $.getJSON(serviceurl+'logbooks/', function(books) {
                       $.each(books.logbook, function(i,item) {
-                        $('.modal-body #book').append($('<option>').text(item.name));
+                        $('.modal-body #book').append($('<option value="'+item.name+'">').text(item.name));
                     });
                 });
             });
@@ -329,14 +327,22 @@ and open the template in the editor.
             //
             //----------------------------------------------------------------------
             $(document).on("click", ".open-edit", function() {
-                var myLogId = $(this).data('id');
-                
-                // - - - - - - - -
-                // Description
-                // - - - - - - - -
+                var myLogId = $(this).data('id');            
+                // - - - - - - - - - - - -
+                // Description/tags/books
+                // - - - - - - - - - - - -
 //                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logs/' + myLogId, function(log) {
                 $.getJSON(serviceurl+'logs/' + myLogId, function(log) {
+                    // Fill in description
                     $(".modal-body #description").val(log.description);
+                    // Select tags
+                    $.each(log.tags, function(i,item) {
+                       $('.modal-body #tag').find('[value="'+item.name+'"]').attr('selected', 'selected').attr('id','active');
+                    });
+                    // Select books
+                    $.each(log.logbooks, function(i,item) {
+                        $('.modal-body #book').find('[value="'+item.name+'"]').attr('selected', 'selected').attr('id','active');
+                    });
                 });
                 
                 // - - - - - - - -
@@ -347,14 +353,17 @@ and open the template in the editor.
 //                        $('.modal-body #attachments').append($('<option>').text(item.name));
 //                    });
 //                });
-                
-                fillSelectBook(myLogId);
+//                window.onload = fillSelectBook(myLogId);
             });
 
 //            
 
 
-
+            //----------------------------------------------------------------------
+            //
+            //              Show the edit modal
+            //
+            //----------------------------------------------------------------------
             $('.edit_log').click(function() {
                 $('#logForm').show('fast');
                 $('#addNewLog').hide();
