@@ -346,9 +346,12 @@ and open the template in the editor.
                     // Select books
                     $.each(log.logbooks, function(i, item) {
                         $('.modal-body #book').find('[value="' + item.name + '"]').attr('selected', 'selected').attr('id', 'active');
+                    });    
+                    $.each(log.logbooks, function(i,item) {
+                        $('.modal-body #book').find('[value="'+item.name+'"]').attr('selected', 'selected');
                     });
                 });
-
+                
                 // - - - - - - - -
                 // Attachemtns
                 // - - - - - - - -
@@ -412,10 +415,6 @@ and open the template in the editor.
                     itemSelector: '.attachments'
                 });
             });
-
-
-
-
         </script>
         <div class="container"><div id="target"></div></div>
 
