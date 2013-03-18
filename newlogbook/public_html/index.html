@@ -224,7 +224,7 @@ and open the template in the editor.
                     // Inject templates.
                     $('body').append(templates);
                     rfn = $('#logs_tmpl').compile(directives);
-                    $.getJSON(serviceurl+'logs?limit=30&page=1', function(logs) {
+                    $.getJSON(serviceurl + 'logs?limit=30&page=1', function(logs) {
                         $('#target').append(rfn(logs));
                         $('#target').html(rfn(logs));
                         $(":file").filestyle({
@@ -251,18 +251,18 @@ and open the template in the editor.
                 // Tags list
                 // - - - - - - - -
 //                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/tags/', function(tags) {
-                $.getJSON(serviceurl+'tags/', function(tags) {
-                    $.each(tags.tag, function(i,item) {
-                        $('.modal-body #tag').append($('<option value="'+item.name+'">').text(item.name));
+                $.getJSON(serviceurl + 'tags/', function(tags) {
+                    $.each(tags.tag, function(i, item) {
+                        $('.modal-body #tag').append($('<option value="' + item.name + '">').text(item.name));
                     });
-                });                
+                });
                 // - - - - - - - -
                 // Books list
                 // - - - - - - - -
 //                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logbooks/', function(tags) {
-                $.getJSON(serviceurl+'logbooks/', function(books) {
-                      $.each(books.logbook, function(i,item) {
-                        $('.modal-body #book').append($('<option value="'+item.name+'">').text(item.name));
+                $.getJSON(serviceurl + 'logbooks/', function(books) {
+                    $.each(books.logbook, function(i, item) {
+                        $('.modal-body #book').append($('<option value="' + item.name + '">').text(item.name));
                     });
                 });
             });
@@ -327,33 +327,42 @@ and open the template in the editor.
             //
             //----------------------------------------------------------------------
             $(document).on("click", ".open-edit", function() {
-                var myLogId = $(this).data('id');            
+                var myLogId = $(this).data('id');
+                // - - - - - - - - - - - -
+                // Delete old attachments
+                // - - - - - - - - - - - -
+                $('#modalcontainer > div').remove();
                 // - - - - - - - - - - - -
                 // Description/tags/books
                 // - - - - - - - - - - - -
 //                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logs/' + myLogId, function(log) {
-                $.getJSON(serviceurl+'logs/' + myLogId, function(log) {
+                $.getJSON(serviceurl + 'logs/' + myLogId, function(log) {
                     // Fill in description
                     $(".modal-body #description").val(log.description);
                     // Select tags
-                    $.each(log.tags, function(i,item) {
-                       $('.modal-body #tag').find('[value="'+item.name+'"]').attr('selected', 'selected').attr('id','active');
+                    $.each(log.tags, function(i, item) {
+                        $('.modal-body #tag').find('[value="' + item.name + '"]').attr('selected', 'selected').attr('id', 'active');
                     });
                     // Select books
-                    $.each(log.logbooks, function(i,item) {
-                        $('.modal-body #book').find('[value="'+item.name+'"]').attr('selected', 'selected').attr('id','active');
+                    $.each(log.logbooks, function(i, item) {
+                        $('.modal-body #book').find('[value="' + item.name + '"]').attr('selected', 'selected').attr('id', 'active');
                     });
                 });
-                
+
                 // - - - - - - - -
                 // Attachemtns
                 // - - - - - - - -
-//                $.getJSON(serviceurl+'attachments/' + myLogId, function(a) {
-//                    $.each(a.attachment, function(i,item) {
-//                        $('.modal-body #attachments').append($('<option>').text(item.name));
-//                    });
-//                });
-//                window.onload = fillSelectBook(myLogId);
+                $.getJSON(serviceurl + 'attachments/' + myLogId, function(a) {
+                    $.each(a.attachment, function(i, item) {
+                        $('.modal-body #modalcontainer').append(
+                                '<div id="modalattach" class="attachments masonry-brick">' +
+                                '<a class="attachment fileName" href="' + serviceurl + 'attachments/' + myLogId + '/' + item.fileName +'">' +
+                                '<div class="nonImage"></div>' +
+                                '<img class="image" src="' + serviceurl + 'attachments/' + myLogId + '/' + item.fileName + ':thumbnail"/>' +
+                                '</a></div>');
+                    });
+                });
+                window.onload = fillSelectBook(myLogId);
             });
 
 //            
@@ -389,12 +398,20 @@ and open the template in the editor.
             //
             //----------------------------------------------------------------------
             var $container = $('#container');
-            
-            $container.imagesLoaded( function(){
+
+            $container.imagesLoaded(function() {
                 $container.masonry({
-                    itemSelector : '.attachments'
-                 });
-             });
+                    itemSelector: '.attachments'
+                });
+            });
+            
+            var $modalcontainer = $('#modalcontainer');
+
+            $modalcontainer.imagesLoaded(function() {
+                $modalcontainer.masonry({
+                    itemSelector: '.attachments'
+                });
+            });
 
 
 
@@ -456,6 +473,9 @@ and open the template in the editor.
                         <div class="span8"><label>Description</label>
                             <textarea class="input-block-level" id="description" rows="10" style="resize: none;"></textarea>
                         </div>
+                    </div>
+                    <div id="modalcontainer" class="row span8 clearfix masonry">
+                        
                     </div>
                 </div>
             </div>
