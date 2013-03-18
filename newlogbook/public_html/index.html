@@ -331,7 +331,14 @@ and open the template in the editor.
                 // - - - - - - - - - - - -
                 // Delete old attachments
                 // - - - - - - - - - - - -
-                $('#modalcontainer > div').remove();
+                $('#modalcontainer > div').remove()
+                
+                // - - - - - - - - - - - -
+                // Clear selections
+                // - - - - - - - - - - - -               
+                $('option').each(function(opt) {
+                    $(this).attr('selected',false);
+                });
                 // - - - - - - - - - - - -
                 // Description/tags/books
                 // - - - - - - - - - - - -
