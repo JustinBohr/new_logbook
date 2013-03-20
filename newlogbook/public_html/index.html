@@ -19,6 +19,11 @@ and open the template in the editor.
                 padding-top: 60px;
                 padding-bottom: 40px;
             }
+            a.disabled {
+                text-decoration: none;
+                color: black;
+                cursor: default;
+            }
         </style>
 
         <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -43,8 +48,8 @@ and open the template in the editor.
         <script src="js/pure_min.js"></script>
         <script src="js/bootstrap-filestyle-0.1.0.min.js"></script>
         <script src="js/jquery.masonry.min.js"></script>
-        <script src="js/jquery.simplePagination.js"></script>
-        <!--    <script src="js/jquery.infinitescroll.js"></script> -->
+        <!--<script src="js/jquery.simplePagination.js"></script>-->
+        <!--<script src="js/jquery.infinitescroll.js"></script>--> 
 
         <script>serviceurl = "https://controls.frib.msu.edu/olog/resources/";</script>
         <script>logLimit = "limit=15";</script>
@@ -58,15 +63,14 @@ and open the template in the editor.
             <div id="pageNav" class="pagination">
                  <ul>
 
-                <li class="previous_link">
-                <a href="javascript:previous();">&larr; Previous</a>
+                <li id="paging" class="previous_link">
+                <a id="prev" class='enable' href="javascript:previous();">&larr; Previous</a>
                 </li>
                 <li>
-               <a class="next_link" href="javascript:next();">Next &rarr;</a>
+               <a id="next" class='enable' href="javascript:next();">Next &rarr;</a>
                 </li>
                 </ul>
             </div>
-            <div id="target"></div>
         </div>
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
@@ -437,10 +441,50 @@ and open the template in the editor.
             }
             function go_to_page(pageNum) {
                 $.getJSON(serviceurl+'logs?'+logLimit, 'page=' + pageNum, function(logs) {
-                    $('#target').html(rfn(logs));
+//                    $('#target').html(rfn(logs));
                     $('#current_page').val(pageNum);
+//                    if (pageNum == 1) {
+//                        $('.container .enable a').val('disabled');
+//                    }
+                        $('#target').append(rfn(logs));
+                        $('#target').html(rfn(logs));
+                        $(":file").filestyle({
+                            icon: true,
+                            classIcon: "icon-picture",
+                            showFilename: false,
+                            classButton: "btn",
+                            buttonText: "",
+                            textField: false
+                        });
+                        $('div[id^="log_"]').hover(
+                                function() { // Hover in
+                                    $(this).find('.action_buttons').show();
+                                },
+                                function() { // Hover out
+                                    $(this).find('.action_buttons').hide();
+                                });
                 });
             }
+        
+//            $(function() {
+//                $('#paging').pagination({
+//                    items:              100,
+//                    itemsOnPage:        10,
+//                    hrefTextPrefix:     'page=',
+////                    cssStyle: 'light-theme'
+//                });
+//            });
+
+
+//            $('#content').infinitescroll({
+//
+//              navSelector  : "div#pageNav",            
+//                             // selector for the paged navigation (it will be hidden)
+//              nextSelector : "div#pageNav a.next_link:last",    
+//                             // selector for the NEXT link (to page 2)
+//              itemSelector : "#content div.post"          
+//                             // selector for all items you'll retrieve
+//            });
         </script>
         <div class="container"><div id="target"></div></div>
 
