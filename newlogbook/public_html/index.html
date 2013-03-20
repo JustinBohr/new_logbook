@@ -374,16 +374,16 @@ and open the template in the editor.
                 // - - - - - - - -
                 // Attachemtns
                 // - - - - - - - -
-                $.getJSON(serviceurl + 'attachments/' + myLogId, function(a) {
-                    $.each(a.attachment, function(i, item) {
-                        $('.modal-body #modalcontainer').append(
-                                '<div id="modalattach" class="attachments masonry-brick">' +
-                                '<a class="attachment fileName" href="' + serviceurl + 'attachments/' + myLogId + '/' + item.fileName +'">' +
-                                '<div class="nonImage"></div>' +
-                                '<img class="image" src="' + serviceurl + 'attachments/' + myLogId + '/' + item.fileName + ':thumbnail"/>' +
-                                '</a></div>');
-                    });
-                });
+//                $.getJSON(serviceurl + 'attachments/' + myLogId, function(a) {
+//                    $.each(a.attachment, function(i, item) {
+//                        $('.modal-body #modalcontainer').append(
+//                                '<div id="modalattach" class="attachments masonry-brick">' +
+//                                '<a class="attachment fileName" href="' + serviceurl + 'attachments/' + myLogId + '/' + item.fileName +'">' +
+//                                '<div class="nonImage"></div>' +
+//                                '<img class="image" src="' + serviceurl + 'attachments/' + myLogId + '/' + item.fileName + ':thumbnail"/>' +
+//                                '</a></div>');
+//                    });
+//                });
             });           
 
 
@@ -405,16 +405,18 @@ and open the template in the editor.
             //              Masonry for images
             //
             //----------------------------------------------------------------------
+            //var $container = $('#container');
             var $container = $('#container');
-
+            
             $container.imagesLoaded(function() {
                 $container.masonry({
                     itemSelector: '.attachments'
                 });
             });
             
-            var $modalcontainer = $('#modalcontainer');
-
+            //var $modalcontainer = $('#modalcontainer');
+            var $container = $('#container');
+            
             $modalcontainer.imagesLoaded(function() {
                 $modalcontainer.masonry({
                     itemSelector: '.attachments'
