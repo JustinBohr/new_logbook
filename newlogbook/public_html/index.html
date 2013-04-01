@@ -13,6 +13,7 @@ and open the template in the editor.
         <link rel="stylesheet" href="css/bootstrap.css">
         <link rel="stylesheet" href="css/bootstrap-responsive.css" type="text/css"/>
         <link rel="stylesheet" href="css/style.css" type="text/css"/>
+        <link rel="stylesheet" href="css/jquery.ias.css" type="text/css"/>
 
         <style type="text/css">
             body {
@@ -48,8 +49,9 @@ and open the template in the editor.
         <script src="js/pure_min.js"></script>
         <script src="js/bootstrap-filestyle-0.1.0.min.js"></script>
         <script src="js/jquery.masonry.min.js"></script>
+        <script src="js/jquery-ias.min.js"></script>
         <!--<script src="js/jquery.simplePagination.js"></script>-->
-        <!--<script src="js/jquery.infinitescroll.js"></script>--> 
+        <script src="js/jquery.infinitescroll.js"></script> 
 
         <script>serviceurl = "https://controls.frib.msu.edu/olog/resources/";</script>
         <script>logLimit = "limit=15";</script>
@@ -59,19 +61,6 @@ and open the template in the editor.
     </head>
     <body>
         <input type='hidden' id='current_page' />
-        <div id="pageContainer" class="container">
-            <div id="pageNav" class="pagination">
-                 <ul>
-
-                <li id="paging" class="previous_link">
-                <a id="prev" class='enable' href="javascript:previous();">&larr; Previous</a>
-                </li>
-                <li>
-               <a id="next" class='enable' href="javascript:next();">Next &rarr;</a>
-                </li>
-                </ul>
-            </div>
-        </div>
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
@@ -92,11 +81,11 @@ and open the template in the editor.
                             <li><a href="#">Sign Out</a></li>
                         </ul>
                     </div>
-                    <div class="nav-collapse">
+<!--                    <div class="nav-collapse">
                         <ul class="nav">
                             <li class="active"><a href="index.html">Home</a></li>
                         </ul>
-                    </div><!--/.nav-collapse -->
+                    </div>/.nav-collapse -->
                     <!-- The drop down menu -->
                     <ul class="nav pull-right">
                         <li class="divider-vertical"></li>
@@ -114,6 +103,19 @@ and open the template in the editor.
                         </li>
                     </ul>
                 </div>
+            </div>
+        </div>
+        <div id="pageContainer" class="container">
+            <div id="pageNav" class="pagination">
+                <ul><li><a id="home" href="javascript:home();"><i class="icon-home"></i> Home</a></li></ul>
+                 <ul>
+                <li id="paging" class="previous_link">
+                <a id="prev" class='disabled' href="javascript:previous();">&larr; Previous</a>
+                </li>
+                <li>
+               <a id="next" href="javascript:next();">Next &rarr;</a>
+                </li>
+                </ul>
             </div>
         </div>
         <script>
@@ -245,8 +247,12 @@ and open the template in the editor.
                     // Inject templates.
                     $('body').append(templates);
                     rfn = $('#logs_tmpl').compile(directives);
+//                    console.log(directives);
+//                    console.log(rfn(directives));
                     $.getJSON(serviceurl + 'logs?'+logLimit+'&page=1', function(logs) {
                         $('#target').append(rfn(logs));
+                        console.log(logs);
+//                        console.log(rfn(logs));
                         $('#target').html(rfn(logs));
                         $(":file").filestyle({
                             icon: true,
@@ -285,7 +291,7 @@ and open the template in the editor.
                     $.each(books.logbook, function(i, item) {
                         $('.modal-body #book').append($('<option value="' + item.name + '">').text(item.name));
                     });
-                });
+                });            
             });
 
 
@@ -426,6 +432,9 @@ and open the template in the editor.
             //              Pagination
             //
             //----------------------------------------------------------------------
+           function home() {
+               go_to_page(1);
+           }
            function previous() {
 
                 new_page = parseInt($('#current_page').val()) - 1;
@@ -441,11 +450,17 @@ and open the template in the editor.
             }
             function go_to_page(pageNum) {
                 $.getJSON(serviceurl+'logs?'+logLimit, 'page=' + pageNum, function(logs) {
+                    console.log(logs);
 //                    $('#target').html(rfn(logs));
                     $('#current_page').val(pageNum);
-//                    if (pageNum == 1) {
-//                        $('.container .enable a').val('disabled');
-//                    }
+                    // Disables the previous button at page 1
+                    if (pageNum == 1) {
+//                        $('.container #prev a').val('disabled');
+                        document.getElementById('prev').className += ' disabled';
+                    }
+                    else {
+                        document.getElementById('prev').className -= ' disabled';
+                    }
                         $('#target').append(rfn(logs));
                         $('#target').html(rfn(logs));
                         $(":file").filestyle({
@@ -465,7 +480,7 @@ and open the template in the editor.
                                 });
                 });
             }
-        
+            
 //            $(function() {
 //                $('#paging').pagination({
 //                    items:              100,
@@ -485,6 +500,40 @@ and open the template in the editor.
 //              itemSelector : "#content div.post"          
 //                             // selector for all items you'll retrieve
 //            });
+//        jQuery.ias({
+//                pagination:             '#pageContainer .pagination',
+//                container:              '.logs',
+//                item:                   '.row',
+//                next:                   '.next a',
+//                loader:                 '<img src="img/loader.gif"/>',
+//                triggerPageThreshold:   2
+//        });
+            //----------------------------------------------------------------------
+            $('#container').infinitescroll({
+
+                    // callback		: function () { console.log('using opts.callback'); },
+                    navSelector  	: "a#next",
+                    nextSelector 	: "a#next",
+                    itemSelector 	: "#target",
+                    debug		: true,
+                    dataType	 	: 'json',
+                    appendCallback	: false // USE FOR PREPENDING
+                    // pathParse     	: function( pathStr, nextPage ){ return pathStr.replace('2', nextPage ); }
+            }, function( response ) {
+                console.log(response);
+                var jsonData = response.results;
+                            $theCntr = $("#target");
+                            var newElements = "";
+                            //var newItems = new Array();
+                            for(var i=0;i<jsonData.length;i++) {
+                                var item = $(_renderItem(jsonData[i]));
+                                //item.css({ opacity: 0 });
+                                $theCntr.append(item);
+                                //newItems.push(item.attr('id'));
+                            }
+                            //_addMasonryItem(newItems);
+            });
+            //----------------------------------------------------------------------
         </script>
         <div class="container"><div id="target"></div></div>
 
@@ -497,7 +546,7 @@ and open the template in the editor.
                 //
                 //              Infinite scroll with JSON
                 //
-                //----------------------------------------------------------------------
+                //----------------------------------------------------------------------        
         
                 var _renderItem = function(data) {
                 return "<p>Title :" + data.title + "</p>";
