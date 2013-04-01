@@ -61,19 +61,6 @@ and open the template in the editor.
     </head>
     <body>
         <input type='hidden' id='current_page' />
-        <div id="pageContainer" class="container">
-            <div id="pageNav" class="pagination">
-                <ul>
-
-                    <li id="paging" class="previous_link">
-                        <a id="prev" class='enable' href="javascript:previous();">&larr; Previous</a>
-                    </li>
-                    <li>
-                        <a id="next" class='enable' href="javascript:next();">Next &rarr;</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
@@ -260,7 +247,9 @@ and open the template in the editor.
                     // Inject templates.
                     $('body').append(templates);
                     rfn = $('#logs_tmpl').compile(directives);
-                    $.getJSON(serviceurl + 'logs?' + logLimit + '&page=1', function(logs) {
+//                    console.log(directives);
+//                    console.log(rfn(directives));
+                    $.getJSON(serviceurl + 'logs?'+logLimit+'&page=1', function(logs) {
                         $('#target').append(rfn(logs));
                         console.log(logs);
 //                        console.log(rfn(logs));
@@ -364,12 +353,12 @@ and open the template in the editor.
                 // Delete old attachments
                 // - - - - - - - - - - - -
                 $('#modalcontainer > div').remove();
-
+                
                 // - - - - - - - - - - - -
                 // Clear selections
                 // - - - - - - - - - - - -               
                 $('option').each(function(opt) {
-                    $(this).attr('selected', false);
+                    $(this).attr('selected',false);
                 });
                 // - - - - - - - - - - - -
                 // Description/tags/books
@@ -385,12 +374,12 @@ and open the template in the editor.
                     // Select books
                     $.each(log.logbooks, function(i, item) {
                         $('.modal-body #book').find('[value="' + item.name + '"]').attr('selected', 'selected').attr('id', 'active');
-                    });
-                    $.each(log.logbooks, function(i, item) {
-                        $('.modal-body #book').find('[value="' + item.name + '"]').attr('selected', 'selected');
+                    });    
+                    $.each(log.logbooks, function(i,item) {
+                        $('.modal-body #book').find('[value="'+item.name+'"]').attr('selected', 'selected');
                     });
                 });
-
+                
                 // - - - - - - - -
                 // Attachemtns
                 // - - - - - - - -
@@ -398,15 +387,13 @@ and open the template in the editor.
                     $.each(a.attachment, function(i, item) {
                         $('.modal-body #modalcontainer').append(
                                 '<div id="modalattach" class="attachments masonry-brick">' +
-                                '<a class="attachment fileName" href="' + serviceurl + 'attachments/' + myLogId + '/' + item.fileName + '">' +
+                                '<a class="attachment fileName" href="' + serviceurl + 'attachments/' + myLogId + '/' + item.fileName +'">' +
                                 '<div class="nonImage"></div>' +
                                 '<img class="image" src="' + serviceurl + 'attachments/' + myLogId + '/' + item.fileName + ':thumbnail"/>' +
                                 '</a></div>');
                     });
                 });
-                
-                
-            });
+            });           
 
 
             //----------------------------------------------------------------------
@@ -427,7 +414,6 @@ and open the template in the editor.
             //              Masonry for images
             //
             //----------------------------------------------------------------------
-            //var $container = $('#container');
             var $container = $('#container');
 
             $container.imagesLoaded(function() {
@@ -435,22 +421,24 @@ and open the template in the editor.
                     itemSelector: '.attachments'
                 });
             });
-
-            //var $modalcontainer = $('#modalcontainer');
-            var $container = $('#container');
+            
+            var $modalcontainer = $('#modalcontainer');
 
             $modalcontainer.imagesLoaded(function() {
                 $modalcontainer.masonry({
                     itemSelector: '.attachments'
                 });
             });
-
+        
             //----------------------------------------------------------------------
             //
             //              Pagination
             //
             //----------------------------------------------------------------------
-            function previous() {
+           function home() {
+               go_to_page(1);
+           }
+           function previous() {
 
                 new_page = parseInt($('#current_page').val()) - 1;
 
@@ -464,32 +452,38 @@ and open the template in the editor.
                 go_to_page(new_page);
             }
             function go_to_page(pageNum) {
-                $.getJSON(serviceurl + 'logs?' + logLimit, 'page=' + pageNum, function(logs) {
+                $.getJSON(serviceurl+'logs?'+logLimit, 'page=' + pageNum, function(logs) {
+                    console.log(logs);
 //                    $('#target').html(rfn(logs));
                     $('#current_page').val(pageNum);
-//                    if (pageNum == 1) {
-//                        $('.container .enable a').val('disabled');
-//                    }
-                    $('#target').append(rfn(logs));
-                    $('#target').html(rfn(logs));
-                    $(":file").filestyle({
-                        icon: true,
-                        classIcon: "icon-picture",
-                        showFilename: false,
-                        classButton: "btn",
-                        buttonText: "",
-                        textField: false
-                    });
-                    $('div[id^="log_"]').hover(
-                            function() { // Hover in
-                                $(this).find('.action_buttons').show();
-                            },
-                            function() { // Hover out
-                                $(this).find('.action_buttons').hide();
-                            });
+                    // Disables the previous button at page 1
+                    if (pageNum == 1) {
+//                        $('.container #prev a').val('disabled');
+                        document.getElementById('prev').className += ' disabled';
+                    }
+                    else {
+                        document.getElementById('prev').className -= ' disabled';
+                    }
+                        $('#target').append(rfn(logs));
+                        $('#target').html(rfn(logs));
+                        $(":file").filestyle({
+                            icon: true,
+                            classIcon: "icon-picture",
+                            showFilename: false,
+                            classButton: "btn",
+                            buttonText: "",
+                            textField: false
+                        });
+                        $('div[id^="log_"]').hover(
+                                function() { // Hover in
+                                    $(this).find('.action_buttons').show();
+                                },
+                                function() { // Hover out
+                                    $(this).find('.action_buttons').hide();
+                                });
                 });
             }
-
+            
 //            $(function() {
 //                $('#paging').pagination({
 //                    items:              100,
@@ -604,7 +598,7 @@ and open the template in the editor.
                         </div>
                     </div>
                     <div id="modalcontainer" class="row span7 clearfix masonry">
-
+                        
                     </div>
                 </div>
             </div>
