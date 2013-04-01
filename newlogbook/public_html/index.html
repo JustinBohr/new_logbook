@@ -254,6 +254,8 @@ and open the template in the editor.
                         console.log(logs);
 //                        console.log(rfn(logs));
                         $('#target').html(rfn(logs));
+                        // Custom fire event
+                        //
                         $(":file").filestyle({
                             icon: true,
                             classIcon: "icon-picture",
@@ -294,7 +296,8 @@ and open the template in the editor.
                 });            
             });
 
-
+// Custom listener for custom fire event above
+//
             //----------------------------------------------------------------------
             //
             //              Paste image from clipboard
@@ -509,6 +512,8 @@ and open the template in the editor.
 //                triggerPageThreshold:   2
 //        });
             //----------------------------------------------------------------------
+            // Needs to fire for a custom event after the PURE template loads
+            // lines with comments about 257,299
             $('#container').infinitescroll({
 
                     // callback		: function () { console.log('using opts.callback'); },
