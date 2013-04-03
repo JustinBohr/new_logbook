@@ -253,9 +253,10 @@ and open the template in the editor.
                         $('#target').append(rfn(logs));
                         console.log(logs);
 //                        console.log(rfn(logs));
-                        $('#target').html(rfn(logs));
+//                        $('#target').html(rfn(logs));
                         // Custom fire event
-                        // http://www.sitepoint.com/javascript-custom-events/
+                        // http://www.sitepoint.com/jquery-custom-events/
+                        $('.logs').on('load',infScrollRaise);
                         $(":file").filestyle({
                             icon: true,
                             classIcon: "icon-picture",
@@ -297,7 +298,8 @@ and open the template in the editor.
             });
 
 // Custom listener for custom fire event above
-// http://www.sitepoint.com/javascript-custom-events/
+// http://www.sitepoint.com/jquery-custom-events/
+            $(document).on('infScroll',infScrollHandler);
             //----------------------------------------------------------------------
             //
             //              Paste image from clipboard
@@ -514,7 +516,16 @@ and open the template in the editor.
             //----------------------------------------------------------------------
             // Needs to fire for a custom event after the PURE template loads
             // lines with comments about 257,299
-            $('#container').infinitescroll({
+            
+            function infScrollRaise(e) {
+//                e.preventDefault();
+                $.event.trigger({
+                    type: 'infScroll'
+                });
+            }
+            
+            function infScrollHandler() {
+                $('#container').infinitescroll({
 
                     // callback		: function () { console.log('using opts.callback'); },
                     navSelector  	: "a#next",
@@ -524,20 +535,21 @@ and open the template in the editor.
                     dataType	 	: 'json',
                     appendCallback	: false // USE FOR PREPENDING
                     // pathParse     	: function( pathStr, nextPage ){ return pathStr.replace('2', nextPage ); }
-            }, function( response ) {
-                console.log(response);
-                var jsonData = response.results;
-                            $theCntr = $("#target");
-                            var newElements = "";
-                            //var newItems = new Array();
-                            for(var i=0;i<jsonData.length;i++) {
-                                var item = $(_renderItem(jsonData[i]));
-                                //item.css({ opacity: 0 });
-                                $theCntr.append(item);
-                                //newItems.push(item.attr('id'));
-                            }
-                            //_addMasonryItem(newItems);
-            });
+                }, function( response ) {
+                    console.log(response);
+                    var jsonData = response.results;
+                                $theCntr = $("#target");
+                                var newElements = "";
+                                //var newItems = new Array();
+                                for(var i=0;i<jsonData.length;i++) {
+                                    var item = $(_renderItem(jsonData[i]));
+                                    //item.css({ opacity: 0 });
+                                    $theCntr.append(item);
+                                    //newItems.push(item.attr('id'));
+                                }
+                                //_addMasonryItem(newItems);
+                });
+            }
             //----------------------------------------------------------------------
         </script>
         <div class="container"><div id="target"></div></div>
