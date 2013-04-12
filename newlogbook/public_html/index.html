@@ -249,14 +249,15 @@ and open the template in the editor.
                     rfn = $('#logs_tmpl').compile(directives);
 //                    console.log(directives);
 //                    console.log(rfn(directives));
+                    $('.logs').on('load',infScrollRaise);
                     $.getJSON(serviceurl + 'logs?'+logLimit+'&page=1', function(logs) {
                         $('#target').append(rfn(logs));
-                        console.log(logs);
+                        $('.logs').trigger('load');
+//                        console.log(logs);
 //                        console.log(rfn(logs));
 //                        $('#target').html(rfn(logs));
                         // Custom fire event
                         // http://www.sitepoint.com/jquery-custom-events/
-                        $('.logs').on('load',infScrollRaise);
                         $(":file").filestyle({
                             icon: true,
                             classIcon: "icon-picture",
@@ -265,6 +266,7 @@ and open the template in the editor.
                             buttonText: "",
                             textField: false
                         });
+                        $('.logs').on('load',infScrollRaise);
                         $('div[id^="log_"]').hover(
                                 function() { // Hover in
                                     $(this).find('.action_buttons').show();
@@ -294,7 +296,8 @@ and open the template in the editor.
                     $.each(books.logbook, function(i, item) {
                         $('.modal-body #book').append($('<option value="' + item.name + '">').text(item.name));
                     });
-                });            
+                });
+                $('.logs').on('load',infScrollRaise);
             });
 
 // Custom listener for custom fire event above
@@ -455,7 +458,7 @@ and open the template in the editor.
             }
             function go_to_page(pageNum) {
                 $.getJSON(serviceurl+'logs?'+logLimit, 'page=' + pageNum, function(logs) {
-                    console.log(logs);
+//                    console.log(logs);
 //                    $('#target').html(rfn(logs));
                     $('#current_page').val(pageNum);
                     // Disables the previous button at page 1
@@ -525,7 +528,7 @@ and open the template in the editor.
             }
             
             function infScrollHandler() {
-                $('#container').infinitescroll({
+                $('.logs').infinitescroll({
 
                     // callback		: function () { console.log('using opts.callback'); },
                     navSelector  	: "a#next",
