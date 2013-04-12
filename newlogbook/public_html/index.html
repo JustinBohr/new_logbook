@@ -519,10 +519,10 @@ and open the template in the editor.
                     rfn = $('#logs_tmpl').compile(directives);
 //                    console.log(directives);
 //                    console.log(rfn(directives));
-                    $('.logs').on('load',infScrollRaise);
+
                     $.getJSON(serviceurl + 'logs?'+logLimit+'&page=1', function(logs) {
                         $('#target').append(rfn(logs));
-                        $('.logs').trigger('load');
+
 //                        console.log(logs);
 //                        console.log(rfn(logs));
 //                        $('#target').html(rfn(logs));
