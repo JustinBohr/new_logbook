@@ -113,7 +113,7 @@ and open the template in the editor.
                 <a id="prev" class='disabled' href="javascript:previous();">&larr; Previous</a>
                 </li>
                 <li>
-               <a id="next" href="javascript:next();">Next &rarr;</a>
+               <a id="next" class="next" href="javascript:next();">Next &rarr;</a>
                 </li>
                 </ul>
             </div>
@@ -159,6 +159,8 @@ and open the template in the editor.
             function padStr(i) {
                 return (i < 10) ? "0" + i : "" + i;
             }
+
+            
 
             //----------------------------------------------------------------------
             //
@@ -243,6 +245,7 @@ and open the template in the editor.
                 $('#page').val(1);
                 $('#current_page').val(1);
                 pageNum = 1;
+                $('#next').attr('href', serviceurl + 'logs?'+logLimit+ 'page=' + pageNum);
                 $.get('_logs.tmpl.html', function(templates) {
                     // Inject templates.
                     $('body').append(templates);
@@ -489,37 +492,6 @@ and open the template in the editor.
                 });
             }
             
-//            $(function() {
-//                $('#paging').pagination({
-//                    items:              100,
-//                    itemsOnPage:        10,
-//                    hrefTextPrefix:     'page=',
-////                    cssStyle: 'light-theme'
-//                });
-//            });
-
-
-//            $('#content').infinitescroll({
-//
-//              navSelector  : "div#pageNav",            
-//                             // selector for the paged navigation (it will be hidden)
-//              nextSelector : "div#pageNav a.next_link:last",    
-//                             // selector for the NEXT link (to page 2)
-//              itemSelector : "#content div.post"          
-//                             // selector for all items you'll retrieve
-//            });
-//        jQuery.ias({
-//                pagination:             '#pageContainer .pagination',
-//                container:              '.logs',
-//                item:                   '.row',
-//                next:                   '.next a',
-//                loader:                 '<img src="img/loader.gif"/>',
-//                triggerPageThreshold:   2
-//        });
-            //----------------------------------------------------------------------
-            // Needs to fire for a custom event after the PURE template loads
-            // lines with comments about 257,299
-            
             function infScrollRaise(e) {
 //                e.preventDefault();
                 $.event.trigger({
@@ -541,55 +513,48 @@ and open the template in the editor.
                 }, function( response ) {
                     console.log(response);
                     var jsonData = response.results;
-                                $theCntr = $("#target");
-                                var newElements = "";
-                                //var newItems = new Array();
-                                for(var i=0;i<jsonData.length;i++) {
-                                    var item = $(_renderItem(jsonData[i]));
-                                    //item.css({ opacity: 0 });
-                                    $theCntr.append(item);
-                                    //newItems.push(item.attr('id'));
-                                }
-                                //_addMasonryItem(newItems);
+                    $.get('_logs.tmpl.html', function(templates) {
+                    // Inject templates.
+                    $('body').append(templates);
+                    rfn = $('#logs_tmpl').compile(directives);
+//                    console.log(directives);
+//                    console.log(rfn(directives));
+                    $('.logs').on('load',infScrollRaise);
+                    $.getJSON(serviceurl + 'logs?'+logLimit+'&page=1', function(logs) {
+                        $('#target').append(rfn(logs));
+                        $('.logs').trigger('load');
+//                        console.log(logs);
+//                        console.log(rfn(logs));
+//                        $('#target').html(rfn(logs));
+                        // Custom fire event
+                        // http://www.sitepoint.com/jquery-custom-events/
+                        $(":file").filestyle({
+                            icon: true,
+                            classIcon: "icon-picture",
+                            showFilename: false,
+                            classButton: "btn",
+                            buttonText: "",
+                            textField: false
+                        });
+                        $('.logs').on('load',infScrollRaise);
+                        $('div[id^="log_"]').hover(
+                                function() { // Hover in
+                                    $(this).find('.action_buttons').show();
+                                },
+                                function() { // Hover out
+                                    $(this).find('.action_buttons').hide();
+                                });
+                    });
+//                    render();
+//                    $('#page').change(render);
+                    $('div.well.row.log').hide();
+                });
                 });
             }
             //----------------------------------------------------------------------
         </script>
         <div class="container"><div id="target"></div></div>
 
-        <!--    <a id="next" href="mobile2.json"></a>
-        
-            <script>
-        
-        
-                //----------------------------------------------------------------------
-                //
-                //              Infinite scroll with JSON
-                //
-                //----------------------------------------------------------------------        
-        
-                var _renderItem = function(data) {
-                return "<p>Title :" + data.title + "</p>";
-                };
-        
-        
-                $('#content').infinitescroll({
-        
-                        navSelector : "a#next:last",
-                        nextSelector : "a#next:last",
-                        itemSelector : "#content p",
-                        debug	: true,
-                        dataType	: 'json',
-                        appendCallback	: false, // USE FOR PREPENDING
-                }, function( response ) {
-                    var jsonData = response.results;
-                                $theCntr = $("#content");
-                                for(var i=0;i<jsonData.length;i++) {
-                                    var item = $(_renderItem(jsonData[i]));
-                                    $theCntr.append(item);
-                                }
-                        });
-            </script>-->
         <div id="edit" class="modal hide fade in bigModal" style="display: none; ">
             <div class="bigModal-header span7">
                 <a class="close" data-dismiss="modal">x</a>
