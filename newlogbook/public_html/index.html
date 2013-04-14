@@ -60,7 +60,7 @@ and open the template in the editor.
 
     </head>
     <body>
-        <input type='hidden' id='current_page' />
+        <input type='hidden' id='current_page' value='-1' />
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
@@ -242,15 +242,15 @@ and open the template in the editor.
             //----------------------------------------------------------------------
 
             $(document).ready(function() {
-                $('#page').val(1);
-                $('#current_page').val(1);
-                pageNum = 1;
+//                $('#page').val(0);
+                $('#current_page').val(0);
+                pageNum = parseInt($('#current_page').val()) + 1;
+                console.log(pageNum);
                 $('#next').attr('href', serviceurl + 'logs?'+logLimit+ 'page=' + pageNum);
                 
-                loadLogs(1);
+                loadLogs(pageNum);
                 loadLists();
                 
-                $('.logs').on('load',infScrollRaise);
             });
 
             function loadLists() {
@@ -315,7 +315,9 @@ and open the template in the editor.
                 
 // Custom listener for custom fire event above
 // http://www.sitepoint.com/jquery-custom-events/
+
             $(document).on('infScroll',infScrollHandler);
+            
             //----------------------------------------------------------------------
             //
             //              Paste image from clipboard
@@ -530,6 +532,7 @@ and open the template in the editor.
 //                    console.log(directives);
 //                    console.log(rfn(directives));
                     page = parseInt($('#current_page').val()) + 1;
+                    $('#current_page').val(pageNum);
                     loadLogs(page);
                     loadLists();
                     
