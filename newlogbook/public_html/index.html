@@ -246,6 +246,35 @@ and open the template in the editor.
                 $('#current_page').val(1);
                 pageNum = 1;
                 $('#next').attr('href', serviceurl + 'logs?'+logLimit+ 'page=' + pageNum);
+                
+                loadLogs(1);
+                loadLists();
+                
+                $('.logs').on('load',infScrollRaise);
+            });
+
+            function loadLists() {
+                // - - - - - - - -
+                // Tags list
+                // - - - - - - - -
+//                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/tags/', function(tags) {
+                $.getJSON(serviceurl + 'tags/', function(tags) {
+                    $.each(tags.tag, function(i, item) {
+                        $('.modal-body #tag').append($('<option value="' + item.name + '">').text(item.name));
+                    });
+                });
+                // - - - - - - - -
+                // Books list
+                // - - - - - - - -
+//                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logbooks/', function(tags) {
+                $.getJSON(serviceurl + 'logbooks/', function(books) {
+                    $.each(books.logbook, function(i, item) {
+                        $('.modal-body #book').append($('<option value="' + item.name + '">').text(item.name));
+                    });
+                });
+            }
+            
+            function loadLogs (pageNum) {
                 $.get('_logs.tmpl.html', function(templates) {
                     // Inject templates.
                     $('body').append(templates);
@@ -253,7 +282,7 @@ and open the template in the editor.
 //                    console.log(directives);
 //                    console.log(rfn(directives));
                     $('.logs').on('load',infScrollRaise);
-                    $.getJSON(serviceurl + 'logs?'+logLimit+'&page=1', function(logs) {
+                    $.getJSON(serviceurl + 'logs?'+logLimit+'&page='+pageNum, function(logs) {
                         $('#target').append(rfn(logs));
                         $('.logs').trigger('load');
 //                        console.log(logs);
@@ -282,27 +311,8 @@ and open the template in the editor.
 //                    $('#page').change(render);
                     $('div.well.row.log').hide();
                 });
-                // - - - - - - - -
-                // Tags list
-                // - - - - - - - -
-//                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/tags/', function(tags) {
-                $.getJSON(serviceurl + 'tags/', function(tags) {
-                    $.each(tags.tag, function(i, item) {
-                        $('.modal-body #tag').append($('<option value="' + item.name + '">').text(item.name));
-                    });
-                });
-                // - - - - - - - -
-                // Books list
-                // - - - - - - - -
-//                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logbooks/', function(tags) {
-                $.getJSON(serviceurl + 'logbooks/', function(books) {
-                    $.each(books.logbook, function(i, item) {
-                        $('.modal-body #book').append($('<option value="' + item.name + '">').text(item.name));
-                    });
-                });
-                $('.logs').on('load',infScrollRaise);
-            });
-
+            }
+                
 // Custom listener for custom fire event above
 // http://www.sitepoint.com/jquery-custom-events/
             $(document).on('infScroll',infScrollHandler);
@@ -519,32 +529,10 @@ and open the template in the editor.
                     rfn = $('#logs_tmpl').compile(directives);
 //                    console.log(directives);
 //                    console.log(rfn(directives));
-
-                    $.getJSON(serviceurl + 'logs?'+logLimit+'&page=1', function(logs) {
-                        $('#target').append(rfn(logs));
-
-//                        console.log(logs);
-//                        console.log(rfn(logs));
-//                        $('#target').html(rfn(logs));
-                        // Custom fire event
-                        // http://www.sitepoint.com/jquery-custom-events/
-                        $(":file").filestyle({
-                            icon: true,
-                            classIcon: "icon-picture",
-                            showFilename: false,
-                            classButton: "btn",
-                            buttonText: "",
-                            textField: false
-                        });
-                        $('.logs').on('load',infScrollRaise);
-                        $('div[id^="log_"]').hover(
-                                function() { // Hover in
-                                    $(this).find('.action_buttons').show();
-                                },
-                                function() { // Hover out
-                                    $(this).find('.action_buttons').hide();
-                                });
-                    });
+                    page = parseInt($('#current_page').val()) + 1;
+                    loadLogs(page);
+                    loadLists();
+                    
 //                    render();
 //                    $('#page').change(render);
                     $('div.well.row.log').hide();
