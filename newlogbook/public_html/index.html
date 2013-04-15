@@ -461,14 +461,12 @@
             function infScrollHandler() {
                 $('.logs').infinitescroll({
 
-                    // callback		: function () { console.log('using opts.callback'); },
                     navSelector  	: "a#next",
                     nextSelector 	: "a#next",
                     itemSelector 	: "#target",
-                    debug		: true,
+//                    debug		: true,
                     dataType	 	: 'json',
                     appendCallback	: false // USE FOR PREPENDING
-                    // pathParse     	: function( pathStr, nextPage ){ return pathStr.replace('2', nextPage ); }
                 }, function( response ) {
                     $('#target').append(rfn(response));
                     
@@ -476,8 +474,6 @@
                     $('#current_page').val(page);
                     loadLists();
 
-              //    $('div.well.row.log').hide();
-               // });
                 });
             }
             //----------------------------------------------------------------------
