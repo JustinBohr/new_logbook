@@ -160,9 +160,6 @@
             var directives = {
                 'div.log': {
                     'log <- context': {
-                        '@class+': (function(arg) {
-                            return (arg.pos % 2 === 0) ? ' even' : ' odd';
-                        }),
                         '.createdDate': function(arg) {
                             return printDate(arg.item.createdDate);
                         },
@@ -177,7 +174,7 @@
                                 '.+': '#{logbook.name}, '
                             }},
                         '.tag': {'tag <- log.tags': {
-                                '.+': '#{tag.name} '
+                                '.+': '#{tag.name}, '
                             }},
                         '.property': {'property <- log.properties': {
                                 '.+': '#{property.name}, '
@@ -431,7 +428,9 @@
             }
             
         </script>
-        <div class="container"><div id="target"></div></div>
+        <div class="container">
+                <div id="target"></div>
+        </div>
 
         <div id="edit" class="modal hide fade in bigModal" style="display: none; ">
             <div class="bigModal-header span7">
