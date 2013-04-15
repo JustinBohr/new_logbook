@@ -49,7 +49,7 @@
         <script src="js/jquery.infinitescroll.js"></script> 
 
         <script>serviceurl = "https://controls.frib.msu.edu/olog/resources/";</script>
-        <script>logLimit = "limit=15";</script>
+        <script>logLimit = "15";</script>
         <!--<script>serviceurl = "http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/";</script>-->
         <script>rfn = null;</script>
 
@@ -221,7 +221,7 @@
                 $('#current_page').val(0);
                 pageNum = parseInt($('#current_page').val()) + 1;
                 console.log(pageNum);
-                $('#next').attr('href', serviceurl + 'logs?'+logLimit+ '&page=' + pageNum);
+                $('#next').attr('href', serviceurl + 'logs?limit='+logLimit+ '&page=' + pageNum);
                 
                 $.get('_logs.tmpl.html', function(templates) {
                     
@@ -230,7 +230,7 @@
                     rfn = $('#logs_tmpl').compile(directives);
                     $('.logs').on('load',infScrollHandler);
                     
-                    $.getJSON(serviceurl + 'logs?'+logLimit+'&page='+pageNum, function(logs) {
+                    $.getJSON(serviceurl + 'logs?limit='+logLimit+'&page='+pageNum, function(logs) {
                         $('#target').append(rfn(logs));
                         $('.logs').trigger('load');
                         $(":file").filestyle({
