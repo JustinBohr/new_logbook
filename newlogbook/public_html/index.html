@@ -113,15 +113,15 @@
             //              On hover show actions buttons in bottom right
             //
             //----------------------------------------------------------------------    
-            $(document).ready(function() {
-                $('div[id^="log_"]').hover(
-                        function() { // Hover in
-                            $(this).find('.action_buttons').show();
-                        },
-                        function() { // Hover out
-                            $(this).find('.action_buttons').hide();
-                        });
-            });
+//            $(document).ready(function() {
+//                $('div[id^="log_"]').hover(
+//                        function() { // Hover in
+//                            $(this).find('.action_buttons').show();
+//                        },
+//                        function() { // Hover out
+//                            $(this).find('.action_buttons').hide();
+//                        });
+//            });
             //--------------------------------------------------
             //	Format the date and time
             var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -230,13 +230,7 @@
                             buttonText: "",
                             textField: false
                         });
-                        $('div[id^="log_"]').hover(
-                                function() { // Hover in
-                                    $(this).find('.action_buttons').show();
-                                },
-                                function() { // Hover out
-                                    $(this).find('.action_buttons').hide();
-                                });
+                        loadActionButtons();
                     });
                     $('div.well.row.log').hide();
                 });
@@ -244,7 +238,27 @@
                 loadLists();
                
             });
-
+            
+            //----------------------------------------------------------------------
+            //
+            //              Loads action buttons into each log entry
+            //
+            //----------------------------------------------------------------------
+            function loadActionButtons() {
+                $('div[id^="log_"]').hover(
+                    function() { // Hover in
+                        $(this).find('.action_buttons').show();
+                    },
+                    function() { // Hover out
+                        $(this).find('.action_buttons').hide();
+                    });
+            }
+            
+            //----------------------------------------------------------------------
+            //
+            //              Loads tag/logbook selectors
+            //
+            //----------------------------------------------------------------------
             function loadLists() {
                 // - - - - - - - -
                 // Tags list
@@ -414,8 +428,8 @@
                     
                     page = parseInt($('#current_page').val()) + 1;
                     $('#current_page').val(page);
+                    loadActionButtons();
                     loadLists();
-
                 });
             }
             
