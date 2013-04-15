@@ -56,11 +56,11 @@ and open the template in the editor.
         <script>serviceurl = "https://controls.frib.msu.edu/olog/resources/";</script>
         <script>logLimit = "limit=15";</script>
         <!--<script>serviceurl = "http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/";</script>-->
-
+        <script>rfn = null;</script>
 
     </head>
     <body>
-        <input type='hidden' id='current_page' value='-1' />
+        <input type='hidden' id='current_page'/>
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
@@ -240,17 +240,44 @@ and open the template in the editor.
             //              Document ready
             //
             //----------------------------------------------------------------------
-
             $(document).ready(function() {
-//                $('#page').val(0);
+            
                 $('#current_page').val(0);
                 pageNum = parseInt($('#current_page').val()) + 1;
                 console.log(pageNum);
-                $('#next').attr('href', serviceurl + 'logs?'+logLimit+ 'page=' + pageNum);
+                $('#next').attr('href', serviceurl + 'logs?'+logLimit+ '&page=' + pageNum);
                 
-                loadLogs(pageNum);
+                $.get('_logs.tmpl.html', function(templates) {
+                    
+                    // Inject templates.
+                    $('body').append(templates);
+                    rfn = $('#logs_tmpl').compile(directives);
+                    $('.logs').on('load',infScrollHandler);
+                    
+                    $.getJSON(serviceurl + 'logs?'+logLimit+'&page='+pageNum, function(logs) {
+                        $('#target').append(rfn(logs));
+                        $('.logs').trigger('load');
+                        $(":file").filestyle({
+                            icon: true,
+                            classIcon: "icon-picture",
+                            showFilename: false,
+                            classButton: "btn",
+                            buttonText: "",
+                            textField: false
+                        });
+                        $('div[id^="log_"]').hover(
+                                function() { // Hover in
+                                    $(this).find('.action_buttons').show();
+                                },
+                                function() { // Hover out
+                                    $(this).find('.action_buttons').hide();
+                                });
+                    });
+                    $('div.well.row.log').hide();
+                });
+                
                 loadLists();
-                
+               
             });
 
             function loadLists() {
@@ -274,49 +301,43 @@ and open the template in the editor.
                 });
             }
             
-            function loadLogs (pageNum) {
-                $.get('_logs.tmpl.html', function(templates) {
-                    // Inject templates.
-                    $('body').append(templates);
-                    rfn = $('#logs_tmpl').compile(directives);
-//                    console.log(directives);
-//                    console.log(rfn(directives));
-                    $('.logs').on('load',infScrollRaise);
-                    $.getJSON(serviceurl + 'logs?'+logLimit+'&page='+pageNum, function(logs) {
-                        $('#target').append(rfn(logs));
-                        $('.logs').trigger('load');
-//                        console.log(logs);
-//                        console.log(rfn(logs));
-//                        $('#target').html(rfn(logs));
-                        // Custom fire event
-                        // http://www.sitepoint.com/jquery-custom-events/
-                        $(":file").filestyle({
-                            icon: true,
-                            classIcon: "icon-picture",
-                            showFilename: false,
-                            classButton: "btn",
-                            buttonText: "",
-                            textField: false
-                        });
-                        $('.logs').on('load',infScrollRaise);
-                        $('div[id^="log_"]').hover(
-                                function() { // Hover in
-                                    $(this).find('.action_buttons').show();
-                                },
-                                function() { // Hover out
-                                    $(this).find('.action_buttons').hide();
-                                });
-                    });
-//                    render();
-//                    $('#page').change(render);
-                    $('div.well.row.log').hide();
-                });
-            }
+//            function loadLogs (pageNum) { // add limit to function
+//                $.get('_logs.tmpl.html', function(templates) {
+//                    // Inject templates.
+//                    $('body').append(templates);
+//                    $('.logs').on('load',infScrollRaise);
+//                    $.getJSON(serviceurl + 'logs?'+logLimit+'&page='+pageNum, function(logs) {
+//                        $('#target').append(rfn(logs));
+//                        $('.logs').trigger('load');
+////                        $('#target').html(rfn(logs));
+//                        // Custom fire event
+//                        // http://www.sitepoint.com/jquery-custom-events/
+//                        $(":file").filestyle({
+//                            icon: true,
+//                            classIcon: "icon-picture",
+//                            showFilename: false,
+//                            classButton: "btn",
+//                            buttonText: "",
+//                            textField: false
+//                        });
+//                        $('.logs').on('load',infScrollRaise);
+//                        $('div[id^="log_"]').hover(
+//                                function() { // Hover in
+//                                    $(this).find('.action_buttons').show();
+//                                },
+//                                function() { // Hover out
+//                                    $(this).find('.action_buttons').hide();
+//                                });
+//                    });
+////                    render();
+////                    $('#page').change(render);
+//                    $('div.well.row.log').hide();
+//                });
+//            }
                 
 // Custom listener for custom fire event above
 // http://www.sitepoint.com/jquery-custom-events/
 
-            $(document).on('infScroll',infScrollHandler);
             
             //----------------------------------------------------------------------
             //
@@ -383,7 +404,6 @@ and open the template in the editor.
                 // - - - - - - - - - - - -
                 // Description/tags/books
                 // - - - - - - - - - - - -
-//                $.getJSON('http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/logs/' + myLogId, function(log) {
                 $.getJSON(serviceurl + 'logs/' + myLogId, function(log) {
                     // Fill in description
                     $(".modal-body #description").val(log.description);
@@ -401,7 +421,7 @@ and open the template in the editor.
                 });
                 
                 // - - - - - - - -
-                // Attachemtns
+                // Attachments
                 // - - - - - - - -
                 $.getJSON(serviceurl + 'attachments/' + myLogId, function(a) {
                     $.each(a.attachment, function(i, item) {
@@ -473,12 +493,9 @@ and open the template in the editor.
             }
             function go_to_page(pageNum) {
                 $.getJSON(serviceurl+'logs?'+logLimit, 'page=' + pageNum, function(logs) {
-//                    console.log(logs);
-//                    $('#target').html(rfn(logs));
                     $('#current_page').val(pageNum);
-                    // Disables the previous button at page 1
+                    // Disables the previous button on page 1
                     if (pageNum == 1) {
-//                        $('.container #prev a').val('disabled');
                         document.getElementById('prev').className += ' disabled';
                     }
                     else {
@@ -504,13 +521,6 @@ and open the template in the editor.
                 });
             }
             
-            function infScrollRaise(e) {
-//                e.preventDefault();
-                $.event.trigger({
-                    type: 'infScroll'
-                });
-            }
-            
             function infScrollHandler() {
                 $('.logs').infinitescroll({
 
@@ -523,23 +533,14 @@ and open the template in the editor.
                     appendCallback	: false // USE FOR PREPENDING
                     // pathParse     	: function( pathStr, nextPage ){ return pathStr.replace('2', nextPage ); }
                 }, function( response ) {
-                    console.log(response);
-                    var jsonData = response.results;
-                    $.get('_logs.tmpl.html', function(templates) {
-                    // Inject templates.
-                    $('body').append(templates);
-                    rfn = $('#logs_tmpl').compile(directives);
-//                    console.log(directives);
-//                    console.log(rfn(directives));
-                    page = parseInt($('#current_page').val()) + 1;
-                    $('#current_page').val(pageNum);
-                    loadLogs(page);
-                    loadLists();
+                    $('#target').append(rfn(response));
                     
-//                    render();
-//                    $('#page').change(render);
-                    $('div.well.row.log').hide();
-                });
+                    page = parseInt($('#current_page').val()) + 1;
+                    $('#current_page').val(page);
+                    loadLists();
+
+              //    $('div.well.row.log').hide();
+               // });
                 });
             }
             //----------------------------------------------------------------------
