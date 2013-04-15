@@ -97,14 +97,13 @@
         </div>
         <div id="pageContainer" class="container">
             <div id="pageNav" class="pagination">
-                <ul><li><a id="home" href="javascript:home();"><i class="icon-home"></i> Home</a></li></ul>
-                 <ul>
-                <li id="paging" class="previous_link">
-                <a id="prev" class='disabled' href="javascript:previous();">&larr; Previous</a>
-                </li>
-                <li>
-               <a id="next" class="next" href="javascript:next();">Next &rarr;</a>
-                </li>
+                <ul>
+                    <li id="paging" class="previous_link">
+                        <a id="prev" style="display:none;" class='disabled' href="">&larr; Previous</a>
+                    </li>
+                    <li>
+                        <a id="next" style="display:none;" class="next" href="">Next &rarr;</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -406,58 +405,12 @@
                     itemSelector: '.attachments'
                 });
             });
-        
-            //----------------------------------------------------------------------
-            //
-            //              Pagination
-            //
-            //----------------------------------------------------------------------
-           function home() {
-               go_to_page(1);
-           }
-           function previous() {
-
-                new_page = parseInt($('#current_page').val()) - 1;
-
-                if (new_page !== 0) {
-                    go_to_page(new_page);
-                }
-            }
-
-            function next() {
-                new_page = parseInt($('#current_page').val()) + 1;
-                go_to_page(new_page);
-            }
-            function go_to_page(pageNum) {
-                $.getJSON(serviceurl+'logs?'+logLimit, 'page=' + pageNum, function(logs) {
-                    $('#current_page').val(pageNum);
-                    // Disables the previous button on page 1
-                    if (pageNum == 1) {
-                        document.getElementById('prev').className += ' disabled';
-                    }
-                    else {
-                        document.getElementById('prev').className -= ' disabled';
-                    }
-                        $('#target').append(rfn(logs));
-                        $('#target').html(rfn(logs));
-                        $(":file").filestyle({
-                            icon: true,
-                            classIcon: "icon-picture",
-                            showFilename: false,
-                            classButton: "btn",
-                            buttonText: "",
-                            textField: false
-                        });
-                        $('div[id^="log_"]').hover(
-                                function() { // Hover in
-                                    $(this).find('.action_buttons').show();
-                                },
-                                function() { // Hover out
-                                    $(this).find('.action_buttons').hide();
-                                });
-                });
-            }
             
+            //----------------------------------------------------------------------
+            //
+            //              Infinite scroll
+            //
+            //----------------------------------------------------------------------      
             function infScrollHandler() {
                 $('.logs').infinitescroll({
 
