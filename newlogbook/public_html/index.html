@@ -108,22 +108,12 @@
                     e.stopPropagation();
                 });
             });
+
             //----------------------------------------------------------------------
             //
-            //              On hover show actions buttons in bottom right
+            //              Format date and time
             //
-            //----------------------------------------------------------------------    
-//            $(document).ready(function() {
-//                $('div[id^="log_"]').hover(
-//                        function() { // Hover in
-//                            $(this).find('.action_buttons').show();
-//                        },
-//                        function() { // Hover out
-//                            $(this).find('.action_buttons').hide();
-//                        });
-//            });
-            //--------------------------------------------------
-            //	Format the date and time
+            //----------------------------------------------------------------------
             var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
             function printDate(unix) {
