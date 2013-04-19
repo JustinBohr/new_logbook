@@ -420,11 +420,63 @@
         </script>
         <div class="container-fluid">
               <div class="span2">
-                <ul class="nav nav-tabs nav-stacked">
-                  <li class="nav-header">Navigation</li>
-                  <li class="active"><a href="#">Home</a></li>
-                  <li><a href="#">Library</a></li>
+                <ul class="nav nav-list">
+                  <li class="nav-header">Logbooks</li>
+                  <li class="active"><a href="#">All Logbooks</a></li>
+                  <li><a href="#">Operations</a></li>
+                  <li><a href="#">Cryo</a></li>
                 </ul>
+                <div class="accordion" id="accordion2">
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <ul class="nav nav-list"><li class="nav-header">Logs</li></ul>
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                            Time
+                            </a>
+                        </div>
+                        <div id="collapseOne" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                <ul class="nav nav-list">
+                                    <li><a href="#">Last 8 hours</a></li>
+                                    <li><a href="#">Last 24 hours</a></li>
+                                    <li><a href="#">Date picker</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <ul class="nav nav-list"><li class="nav-header">Search</li></ul>
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                            Time
+                            </a>
+                        </div>
+                        <div id="collapseOne" class="accordion-body collapse in">
+                            <div class="accordion-inner">
+                                <ul class="nav nav-list">
+                                    <li><a href="#">Last 8 hours</a></li>
+                                    <li><a href="#">Last 24 hours</a></li>
+                                    <li><a href="#">Date picker</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <ul class="nav nav-list"><li class="nav-header">Properties</li></ul>
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                            Component
+                            </a>
+                        </div>
+                        <div id="collapseTwo" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                <ul class="nav nav-list">
+                                    <li><a href="#">Lab</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
               </div>
               <div class="span10">
                 <div class="container">
