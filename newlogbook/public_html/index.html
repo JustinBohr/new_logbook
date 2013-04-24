@@ -245,7 +245,7 @@
                 // - - - - - - - -
                 $.getJSON(serviceurl + 'tags/', function(tags) {
                     $.each(tags.tag, function(i, item) {
-                        $('#tagsSidebar').append($('<li><a href="'+'javascript:getTags(\''+item.name+'\');">' + item.name + '</a></li>'));
+                        $('#tagsSidebar').append($('<li><a href="'+'javascript:getAttributes(\'tag\',\''+item.name+'\');">' + item.name + '</a></li>'));
                     });
                 });
                 // - - - - - - - -
@@ -253,7 +253,7 @@
                 // - - - - - - - -
                 $.getJSON(serviceurl + 'logbooks/', function(books) {
                     $.each(books.logbook, function(i, item) {
-                        $('#logsSidebar').append($('<li><a href="#">' + item.name + '</a></li>'));
+                        $('#logsSidebar').append($('<li><a href="'+'javascript:getAttributes(\'logbook\',\''+item.name+'\');">' + item.name + '</a></li>'));
                     });
                 });
                 // - - - - - - - -
@@ -287,8 +287,8 @@
             //              Working to be able to select logs with specific tags
             //
             //----------------------------------------------------------------------
-            function getTags(tag) {
-                                   $.getJSON(serviceurl + 'logs?limit='+logLimit+'&page='+pageNum+'&tag='+tag, function(logs) {
+            function getAttributes(caller,attr) {
+                                   $.getJSON(serviceurl + 'logs?limit='+logLimit+'&page='+pageNum+'&'+caller+'='+attr, function(logs) {
                         $('#target').append(rfn(logs));
                         $('.logs').trigger('load');
                         $(":file").filestyle({
@@ -468,7 +468,7 @@
             //
             //----------------------------------------------------------------------      
             function infScrollHandler() {
-                $('.logs').infinitescroll({
+                $('#target').infinitescroll({
 
                     navSelector  	: "a#next",
                     nextSelector 	: "a#next",
