@@ -8,6 +8,7 @@
         <!-- Le styles -->
         <link rel="stylesheet" href="css/bootstrap.css">
         <link rel="stylesheet" href="css/bootstrap-responsive.css" type="text/css"/>
+        <link rel="stylesheet" href="css/datepicker.css" type="text/css"/>
         <link rel="stylesheet" href="css/style.css" type="text/css"/>
         <link rel="stylesheet" href="css/jquery.ias.css" type="text/css"/>
 
@@ -34,6 +35,7 @@
         <script src="js/bootstrap-alert.js"></script>
         <script src="js/bootstrap-modal.js"></script>
         <script src="js/bootstrap-dropdown.js"></script>
+        <script src="js/bootstrap-datepicker.js"></script>
         <script src="js/bootstrap-scrollspy.js"></script>
         <script src="js/bootstrap-tab.js"></script>
         <script src="js/bootstrap-tooltip.js"></script>
@@ -52,6 +54,10 @@
         <script>logLimit = "15";</script>
         <!--<script>serviceurl = "http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/";</script>-->
         <script>rfn = null;</script>
+        <script>
+            var nowTemp = new Date();
+            var today = ((nowTemp.getDate() < 10)?"0":"")+nowTemp.getDate()+"-"+(((nowTemp.getMonth()+1) < 10)?"0":"")+(nowTemp.getMonth()+1)+"-"+nowTemp.getFullYear();
+        </script>
 
     </head>
     <body>
@@ -224,7 +230,13 @@
                 });
                 
                 loadLists();
-               
+                
+                $(function(){
+                    $('#dateStart').datepicker();
+                    $('#dateEnd').datepicker();
+                });
+                
+                $('#datePickInput').val(today);
             });
             
             //----------------------------------------------------------------------
@@ -244,7 +256,7 @@
             
             //----------------------------------------------------------------------
             //
-            //              Loads tag/logbook selectors
+            //        Loads tag/logbook selectors, also loads sidebar properties
             //
             //----------------------------------------------------------------------
             function loadLists() {
@@ -254,6 +266,7 @@
                 $.getJSON(serviceurl + 'tags/', function(tags) {
                     $.each(tags.tag, function(i, item) {
                         $('.modal-body #tag').append($('<option value="' + item.name + '">').text(item.name));
+                        $('#tagsSidebar').append($('<li><a href="#">' + item.name + '</a></li>'));
                     });
                 });
                 // - - - - - - - -
@@ -262,6 +275,13 @@
                 $.getJSON(serviceurl + 'logbooks/', function(books) {
                     $.each(books.logbook, function(i, item) {
                         $('.modal-body #book').append($('<option value="' + item.name + '">').text(item.name));
+                        $('#logsSidebar').append($('<li><a href="#">' + item.name + '</a></li>'));
+                    });
+                });
+                $.getJSON(serviceurl + 'properties/', function(prop) {
+                    $.each(prop.property, function(i, item) {
+                        $('.modal-body #book').append($('<option value="' + item.name + '">').text(item.name));
+                        $('#propertiesSidebar').append($('<li><a href="#">' + item.name + '</a></li>'));
                     });
                 });
             }
@@ -420,42 +440,69 @@
         </script>
         <div class="container-fluid">
               <div class="span3">
-                <ul class="nav nav-list">
-                  <li class="nav-header">Logbooks</li>
+<!--                <ul class="nav nav-list">
+                  <li class="nav-header">Search</li>
                   <li class="divider"></li>
                   <li class="active"><a href="#">All Logbooks</a></li>
                   <li><a href="#">Operations</a></li>
                   <li><a href="#">Cryo</a></li>
-                </ul>
+                </ul>-->
                 <div class="accordion" id="accordion2">
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <ul class="nav nav-list"><li class="nav-header">Search</li></ul>
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                            Time
+                            Logbooks
                             </a>
                         </div>
                         <div id="collapseOne" class="accordion-body collapse">
                             <div class="accordion-inner">
-                                <ul class="nav nav-list">
-                                    <li><a href="#">Last 8 hours</a></li>
-                                    <li><a href="#">Last 24 hours</a></li>
-                                    <li><a href="#">Date picker</a></li>
+                                <ul class="nav nav-list" id="logsSidebar">
                                 </ul>
                             </div>
                         </div>
-                    </div>
-                    <div class="accordion-group">
                         <div class="accordion-heading">
-                            <ul class="nav nav-list"><li class="nav-header">Properties</li></ul>
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                            Component
+                            Tags
                             </a>
                         </div>
                         <div id="collapseTwo" class="accordion-body collapse">
                             <div class="accordion-inner">
-                                <ul class="nav nav-list">
-                                    <li><a href="#">Lab</a></li>
+                                <ul class="nav nav-list" id="tagsSidebar">
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+                            Properties
+                            </a>
+                        </div>
+                        <div id="collapseThree" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                <ul class="nav nav-list" id="propertiesSidebar">
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
+                            Time
+                            </a>
+                        </div>
+                        <div id="collapseFour" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                <ul class="nav nav-list" id="propertiesSidebar">
+                                    <li><a href="#">Last 8 hours</a></li>
+                                    <li><a href="#">Last 24 hours</a></li>
+                                    <li class="nav-header">Start date:</li>
+                                        <li class="input-append date" id="dateStart" data-date="" data-date-format="dd-mm-yyyy">
+                                        <input class="span2" size="16" value="" type="text" readonly>
+                                        <span class="add-on"><i class="icon-calendar"></i></span>
+                                    </li>
+                                    <li class="nav-header">End date:</li>
+                                        <li class="input-append date" id="dateEnd" data-date="" data-date-format="dd-mm-yyyy">
+                                        <input id="datePickInput" class="span2" size="16" value="" type="text" readonly>
+                                        <span class="add-on"><i class="icon-calendar"></i></span>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
