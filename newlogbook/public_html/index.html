@@ -70,7 +70,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="#">Logbook</a>
+                    <a class="brand" href="index.html">Logbook</a>
                     <div class="btn-group pull-right">
                         <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                             <i class="icon-user"></i> Username
@@ -202,8 +202,28 @@
             //
             //----------------------------------------------------------------------
             $(document).ready(function() {
-            
-                $('#current_page').val(0);
+                
+                var field = 'page';
+                var url = window.location.href;
+                if(url.indexOf('?' + field + '=') != -1)
+                    {
+                        // retrieve page number from url, if present
+                        $('#current_page').val(
+                            url.match(/([^\?]*)\?page=(\d*)/)[2]
+                        );
+                    }
+                else if(url.indexOf('&' + field + '=') != -1)
+                    {
+                        // retrieve page number from url, if present
+                        $('#current_page').val(
+                            url.match(/([^\?]*)\?page=(\d*)/)[2]
+                        );
+                    }
+                else
+                    {
+                        // set page to 1 if not present
+                        $('#current_page').val(0);
+                    }
                 pageNum = parseInt($('#current_page').val()) + 1;
                 console.log(pageNum);
                 $('#next').attr('href', serviceurl + 'logs?limit='+logLimit+ '&page=' + pageNum);
@@ -483,6 +503,8 @@
                     $('#current_page').val(page);
                     loadActionButtons();
                     loadLists();
+                    // Changes the url based off the page
+                    window.history.pushState('page'+page,'Title','index.html?page='+page);
                 });
             }
             
