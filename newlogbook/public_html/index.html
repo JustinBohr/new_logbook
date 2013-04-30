@@ -224,41 +224,105 @@
                         // set page to 1 if not present
                         $('#current_page').val(0);
                     }
-                pageNum = parseInt($('#current_page').val()) + 1;
-                $('#next').attr('href', serviceurl + 'logs?limit='+logLimit+ '&page=' + pageNum);
                 
-                $.get('_logs.tmpl.html', function(templates) {
-                    
-                    // Inject templates.
-                    $('body').append(templates);
-                    rfn = $('#logs_tmpl').compile(directives);
-                    $('.logs').on('load',infScrollHandler);
-                    
-                    $.getJSON(serviceurl + 'logs?limit='+logLimit+'&page='+pageNum, function(logs) {
-                        $('#target').append(rfn(logs));
-                        $('.logs').trigger('load');
-                        $(":file").filestyle({
-                            icon: true,
-                            classIcon: "icon-picture",
-                            showFilename: false,
-                            classButton: "btn",
-                            buttonText: "",
-                            textField: false
+                // Retrieve single log if url contains logid
+                var field = 'logid';
+                var url = window.location.href;
+                if(url.indexOf('?' + field + '=') != -1)
+                    {
+                        // retrieve page number from url, if present
+                        var logid = url.match(/([^\?]*)[\?\&]logid=(\d*)/)[2];
+                    }
+                else if(url.indexOf('&' + field + '=') !== -1)
+                    {
+                        // retrieve page number from url, if present
+                        var logid = url.match(/([^\?]*)[\?\&]=(\d*)/)[2];
+                    }
+                else { var logid = null; }
+                
+                if (logid === null)
+                {
+                    pageNum = parseInt($('#current_page').val()) + 1;
+                    $('#next').attr('href', serviceurl + 'logs?limit='+logLimit+ '&page=' + pageNum);
+
+                    $.get('_logs.tmpl.html', function(templates) {
+
+                        // Inject templates.
+                        $('body').append(templates);
+                        rfn = $('#logs_tmpl').compile(directives);
+                        $('.logs').on('load',infScrollHandler);
+
+                        $.getJSON(serviceurl + 'logs?limit='+logLimit+'&page='+pageNum, function(logs) {
+                            $('#target').append(rfn(logs));
+                            $('.logs').trigger('load');
+                            $(":file").filestyle({
+                                icon: true,
+                                classIcon: "icon-picture",
+                                showFilename: false,
+                                classButton: "btn",
+                                buttonText: "",
+                                textField: false
+                            });
+                            loadActionButtons();
                         });
-                        loadActionButtons();
+                        $('div.well.row.log').hide();
                     });
-                    $('div.well.row.log').hide();
-                });
-                
+                }
+                // Load individual log if id given
+                else
+                {
+                    $.get('_logs.tmpl.html', function(templates) {
+
+                        // Inject templates.
+                        $('body').append(templates);
+                        // - - - - - - - - - - - -
+                        // Description/tags/books
+                        // - - - - - - - - - - - -
+                        $.getJSON(serviceurl + 'logs/' + logid, function(log) {
+                            // Fill in description/owner
+                            $(".description:first").append(log.description);
+                            $(".owner:first").append(log.owner);
+                            $(".createdDate:first").append(printDate(log.createdDate));
+                            $(".level:first").append(log.level);
+                            // Select tags
+                            $.each(log.tags, function(i, item) {
+                                $('.tags:first').append(item.name);
+                            });
+                            // Select books
+                            $.each(log.logbooks, function(i, item) {
+                                $('.logbooks:first').append(item.name);
+                            });
+                            // Select properties
+                            $.each(log.properties, function(i, item) {
+                                $('.properties:first').append(item.name);
+                            });
+                        });
+
+                        // - - - - - - - -
+                        // Attachments
+                        // - - - - - - - -
+                        $.getJSON(serviceurl + 'attachments/' + logid, function(a) {
+                            $.each(a.attachment, function(i, item) {
+                                $('.modal-body #modalcontainer').append(
+                                        '<div id="modalattach" class="attachments masonry-brick">' +
+                                        '<a class="attachment fileName" href="' + serviceurl + 'attachments/' + logid + '/' + item.fileName +'" target="_blank">' +
+                                        '<div class="nonImage"></div>' +
+                                        '<img class="image" src="' + serviceurl + 'attachments/' + logid + '/' + item.fileName + ':thumbnail"/>' +
+                                        '</a></div>');
+                            });
+                        });
+//                        $('div.well.row.log').hide();
+                    });
+                }
                 loadLists();
-                
+
                 $('#dateStart').datepicker();
                 $('#dateEnd').datepicker();
                 $('#datePickInput').val(today);
-                
-                
+
+
                 // This loads the sidebar tags/books/properties
-                
+
                 // - - - - - - - -
                 // Tags list
                 // - - - - - - - -
@@ -283,50 +347,49 @@
                         $('#propertiesSidebar').append($('<li><a href="#">' + item.name + '</a></li>'));
                     });
                 });
-                
-            });
-            
-            //----------------------------------------------------------------------
-            //
-            //              Loads action buttons into each log entry
-            //
-            //----------------------------------------------------------------------
-            function loadActionButtons() {
-                $('div[id^="log_"]').hover(
-                    function() { // Hover in
-                        $(this).find('.action_buttons').show();
-                    },
-                    function() { // Hover out
-                        $(this).find('.action_buttons').hide();
-                    });
-            }
-            
-            //----------------------------------------------------------------------
-            //
-            //              Working to be able to select logs with specific tags
-            //
-            //----------------------------------------------------------------------
-            function getAttributes(caller,attr) {
-                                   $.getJSON(serviceurl + 'logs?limit='+logLimit+'&page='+pageNum+'&'+caller+'='+attr, function(logs) {
-                        $('#target').append(rfn(logs));
-                        $('.logs').trigger('load');
-                        $(":file").filestyle({
-                            icon: true,
-                            classIcon: "icon-picture",
-                            showFilename: false,
-                            classButton: "btn",
-                            buttonText: "",
-                            textField: false
+                });
+
+                //----------------------------------------------------------------------
+                //
+                //              Loads action buttons into each log entry
+                //
+                //----------------------------------------------------------------------
+                function loadActionButtons() {
+                    $('div[id^="log_"]').hover(
+                        function() { // Hover in
+                            $(this).find('.action_buttons').show();
+                        },
+                        function() { // Hover out
+                            $(this).find('.action_buttons').hide();
                         });
-                        loadActionButtons();
-                    });
-                    $('div.well.row.log').hide();
-                
-                loadLists();
-                
-                $('#dateStart').datepicker();
-                $('#dateEnd').datepicker();
-                $('#datePickInput').val(today);
+                }
+
+                //----------------------------------------------------------------------
+                //
+                //              Working to be able to select logs with specific tags
+                //
+                //----------------------------------------------------------------------
+                function getAttributes(caller,attr) {
+                            $.getJSON(serviceurl + 'logs?limit='+logLimit+'&page='+pageNum+'&'+caller+'='+attr, function(logs) {
+                            $('#target').append(rfn(logs));
+                            $('.logs').trigger('load');
+                            $(":file").filestyle({
+                                icon: true,
+                                classIcon: "icon-picture",
+                                showFilename: false,
+                                classButton: "btn",
+                                buttonText: "",
+                                textField: false
+                            });
+                            loadActionButtons();
+                        });
+                        $('div.well.row.log').hide();
+
+                    loadLists();
+
+                    $('#dateStart').datepicker();
+                    $('#dateEnd').datepicker();
+                    $('#datePickInput').val(today);
                 
             }
             
