@@ -169,6 +169,7 @@
                             }},
                         '.level': 'log.level',
                         '.description': 'log.description',
+
                         '.attachments': {'attachment<-log.attachments': {
                                 '.attachment@href': function(a) {
                                     return serviceurl + 'attachments/' + a.log.item.id + '/' + a.item.fileName;
@@ -366,7 +367,7 @@
                 //----------------------------------------------------------------------
                 //
                 //              Working to be able to select logs with specific tags
-                //
+                //      Doesn't have multiple tag selection yet.
                 //----------------------------------------------------------------------
                 function getAttributes(caller,attr) {
                             $.getJSON(serviceurl + 'logs?limit='+logLimit+'&page='+pageNum+'&'+caller+'='+attr, function(logs) {
@@ -391,7 +392,7 @@
                     $('#datePickInput').val(today);
                 
             }
-
+            
             //----------------------------------------------------------------------
             //
             //        Loads tag/logbook selectors, also loads sidebar properties
@@ -415,7 +416,7 @@
                     });
                 });
             }
-
+            
             //----------------------------------------------------------------------
             //
             //              Paste image from clipboard
@@ -461,89 +462,6 @@
 
             //----------------------------------------------------------------------
             //
-            //             Allow and handle Drop into attachments
-            //
-            //----------------------------------------------------------------------
-            if (window.FileReader) {
-                var drop;
-                addEventHandler(window, 'load', function() {
-                    //var status = document.getElementById('status');
-                    drop = document.getElementById('drop');
-                    var list = document.getElementById('list');
-
-                    function cancel(e) {
-                        if (e.preventDefault) {
-                            e.preventDefault();
-                        }
-                        return false;
-                    }
-
-                    // Tells the browser that we *can* drop on this target
-                    addEventHandler(drop, 'dragover', cancel);
-                    addEventHandler(drop, 'dragenter', cancel);
-
-                    addEventHandler(drop, 'drop', function(e) {
-                        e = e || window.event; // get window.event if e argument missing (in IE)   
-                        if (e.preventDefault) {
-                            e.preventDefault();
-                        } // stops the browser from redirecting off to the image.
-
-                        var dt = e.dataTransfer;
-                        var files = dt.files;
-                        for (var i = 0; i < files.length; i++) {
-                            var file = files[i];
-                            var reader = new FileReader();
-
-                            //attach event handlers here...
-
-                            reader.readAsDataURL(file);
-                            addEventHandler(reader, 'loadend', function(e, file) {
-                                var bin = this.result;
-                                var newFile = document.createElement('div');
-                                newFile.innerHTML = 'Loaded : ' + file.name + ' size ' + file.size + ' B';
-                                list.appendChild(newFile);
-                                var fileNumber = list.getElementsByTagName('div').length;
-                                status.innerHTML = fileNumber < files.length
-                                        ? 'Loaded 100% of file ' + fileNumber + ' of ' + files.length + '...'
-                                        : 'Done loading. processed ' + fileNumber + ' files.';
-
-                                var img = document.createElement("img");
-                                img.file = file;
-                                img.src = bin;
-                                list.appendChild(img);
-                            }.bindToEventHandler(file));
-                        }
-                        return false;
-                    });
-                    Function.prototype.bindToEventHandler = function bindToEventHandler() {
-                        var handler = this;
-                        var boundParameters = Array.prototype.slice.call(arguments);
-                        //create closure
-                        return function(e) {
-                            e = e || window.event; // get window.event if e argument missing (in IE)   
-                            boundParameters.unshift(e);
-                            handler.apply(this, boundParameters);
-                        }
-                    };
-                });
-            } else {
-                //document.getElementById('status').innerHTML = 'Your browser does not support the HTML5 FileReader.';
-            }
-            function addEventHandler(obj, evt, handler) {
-                if (obj.addEventListener) {
-                    // W3C method
-                    obj.addEventListener(evt, handler, false);
-                } else if (obj.attachEvent) {
-                    // IE method.
-                    obj.attachEvent('on' + evt, handler);
-                } else {
-                    // Old school method.
-                    obj['on' + evt] = handler;
-                }
-            }
-
-            //----------------------------------------------------------------------
-            //
             //              Load info into edit modal
             //
             //----------------------------------------------------------------------
@@ -553,12 +471,12 @@
                 // Delete old attachments
                 // - - - - - - - - - - - -
                 $('#modalcontainer > div').remove();
-
+                
                 // - - - - - - - - - - - -
                 // Clear selections
                 // - - - - - - - - - - - -               
                 $('option').each(function(opt) {
-                    $(this).attr('selected', false);
+                    $(this).attr('selected',false);
                 });
                 // - - - - - - - - - - - -
                 // Description/tags/books
@@ -575,7 +493,7 @@
                         $('.modal-body #book').find('[value="' + item.name + '"]').attr('selected', 'selected').attr('id', 'active');
                     });
                 });
-
+                
                 // - - - - - - - -
                 // Attachments
                 // - - - - - - - -
@@ -583,13 +501,13 @@
                     $.each(a.attachment, function(i, item) {
                         $('.modal-body #modalcontainer').append(
                                 '<div id="modalattach" class="attachments masonry-brick">' +
-                                '<a class="attachment fileName" href="' + serviceurl + 'attachments/' + myLogId + '/' + item.fileName + '" target="_blank">' +
+                                '<a class="attachment fileName" href="' + serviceurl + 'attachments/' + myLogId + '/' + item.fileName +'" target="_blank">' +
                                 '<div class="nonImage"></div>' +
                                 '<img class="image" src="' + serviceurl + 'attachments/' + myLogId + '/' + item.fileName + ':thumbnail"/>' +
                                 '</a></div>');
                     });
                 });
-            });
+            });           
 
 
             //----------------------------------------------------------------------
@@ -617,7 +535,7 @@
                     itemSelector: '.attachments'
                 });
             });
-
+            
             var $modalcontainer = $('#modalcontainer');
 
             $modalcontainer.imagesLoaded(function() {
@@ -625,7 +543,7 @@
                     itemSelector: '.attachments'
                 });
             });
-
+            
             //----------------------------------------------------------------------
             //
             //              Infinite scroll
@@ -638,11 +556,11 @@
                     nextSelector 	: "a#next",
                     itemSelector 	: "#target",
 //                    debug		: true,
-                    dataType: 'json',
-                    appendCallback: false // USE FOR PREPENDING
-                }, function(response) {
+                    dataType	 	: 'json',
+                    appendCallback	: false // USE FOR PREPENDING
+                }, function( response ) {
                     $('#target').append(rfn(response));
-
+                    
                     page = parseInt($('#current_page').val()) + 1;
                     $('#current_page').val(page);
                     loadActionButtons();
@@ -651,7 +569,7 @@
                     window.history.pushState('page'+page,'Title','index.html?page='+page);
                 });
             }
-
+            
         </script>
         <div class="container-fluid">
               <div class="span3">
@@ -749,7 +667,7 @@
                         </div>
                     </div>
                     <div id="modalcontainer" class="row span7 clearfix masonry">
-
+                        
                     </div>
                 </div>
             </div>
@@ -764,9 +682,7 @@
                 <h3>Add Attachment</h3>
             </div>
             <div class="modal-body">
-                <DIV>Drag the files from a folder to a selected area ...</DIV>
-                <div id="drop" class="span4" contenteditable="true"></div>
-                <div id="list" class="span4"></div>
+                <div class="span4" contenteditable="true"></div>
             </div>
             <div class="modal-footer">
                 <form class="span1" style='margin: 0px; width: 40px; padding: 0px' action="localhost" method="POST" enctype="multipart/form-data">
