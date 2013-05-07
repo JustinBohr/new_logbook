@@ -12,17 +12,17 @@
         <link rel="stylesheet" href="css/style.css" type="text/css"/>
         <link rel="stylesheet" href="css/jquery.ias.css" type="text/css"/>
 
-<!--        <style type="text/css">
-            body {
-                padding-top: 60px;
-                padding-bottom: 40px;
-            }
-            a.disabled {
-                text-decoration: none;
-                color: black;
-                cursor: default;
-            }
-        </style>-->
+        <!--        <style type="text/css">
+                    body {
+                        padding-top: 60px;
+                        padding-bottom: 40px;
+                    }
+                    a.disabled {
+                        text-decoration: none;
+                        color: black;
+                        cursor: default;
+                    }
+                </style>-->
 
         <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>
@@ -48,7 +48,8 @@
         <script src="js/bootstrap-filestyle-0.1.0.min.js"></script>
         <script src="js/jquery.masonry.min.js"></script>
         <script src="js/jquery-ias.min.js"></script>
-        <script src="js/jquery.infinitescroll.js"></script> 
+        <script src="js/jquery.infinitescroll.js"></script>
+        <script src="js/zeroclipboard.js"></script>
 
         <script>serviceurl = "https://controls.frib.msu.edu/olog/resources/";</script>
         <script>logLimit = "15";</script>
@@ -56,7 +57,7 @@
         <script>rfn = null;</script>
         <script>
             var nowTemp = new Date();
-            var today = ((nowTemp.getDate() < 10)?"0":"")+nowTemp.getDate()+"-"+(((nowTemp.getMonth()+1) < 10)?"0":"")+(nowTemp.getMonth()+1)+"-"+nowTemp.getFullYear();
+            var today = ((nowTemp.getDate() < 10) ? "0" : "") + nowTemp.getDate() + "-" + (((nowTemp.getMonth() + 1) < 10) ? "0" : "") + (nowTemp.getMonth() + 1) + "-" + nowTemp.getFullYear();
         </script>
 
     </head>
@@ -157,6 +158,9 @@
                         '.open-edit@data-id': function(arg) {
                             return arg.item.id;
                         },
+                        '.copy-link@data-id': function(arg) {
+                            return arg.item.id;
+                        },
                         '.owner': 'log.owner',
                         '.logbook': {'logbook <- log.logbooks': {
                                 '.+': '#{logbook.name}, '
@@ -169,7 +173,6 @@
                             }},
                         '.level': 'log.level',
                         '.description': 'log.description',
-
                         '.attachments': {'attachment<-log.attachments': {
                                 '.attachment@href': function(a) {
                                     return serviceurl + 'attachments/' + a.log.item.id + '/' + a.item.fileName;
@@ -202,57 +205,59 @@
             //
             //----------------------------------------------------------------------
             $(document).ready(function() {
-                
+
                 var field = 'page';
                 var url = window.location.href;
-                if(url.indexOf('?' + field + '=') != -1)
-                    {
-                        // retrieve page number from url, if present
-                        $('#current_page').val(
-                            url.match(/([^\?]*)[\?\&]page=(\d*)/)[2]-1
-                        );
-                    }
-                else if(url.indexOf('&' + field + '=') != -1)
-                    {
-                        // retrieve page number from url, if present
-                        $('#current_page').val(
-                            url.match(/([^\?]*)[\?\&]=(\d*)/)[2]-1
-                        );
-                    }
+                if (url.indexOf('?' + field + '=') != -1)
+                {
+                    // retrieve page number from url, if present
+                    $('#current_page').val(
+                            url.match(/([^\?]*)[\?\&]page=(\d*)/)[2] - 1
+                            );
+                }
+                else if (url.indexOf('&' + field + '=') != -1)
+                {
+                    // retrieve page number from url, if present
+                    $('#current_page').val(
+                            url.match(/([^\?]*)[\?\&]=(\d*)/)[2] - 1
+                            );
+                }
                 else
-                    {
-                        // set page to 1 if not present
-                        $('#current_page').val(0);
-                    }
-                
+                {
+                    // set page to 1 if not present
+                    $('#current_page').val(0);
+                }
+
                 // Retrieve single log if url contains logid
                 var field = 'logid';
                 var url = window.location.href;
-                if(url.indexOf('?' + field + '=') != -1)
-                    {
-                        // retrieve page number from url, if present
-                        var logid = url.match(/([^\?]*)[\?\&]logid=(\d*)/)[2];
-                    }
-                else if(url.indexOf('&' + field + '=') !== -1)
-                    {
-                        // retrieve page number from url, if present
-                        var logid = url.match(/([^\?]*)[\?\&]=(\d*)/)[2];
-                    }
-                else { var logid = null; }
-                
+                if (url.indexOf('?' + field + '=') != -1)
+                {
+                    // retrieve page number from url, if present
+                    var logid = url.match(/([^\?]*)[\?\&]logid=(\d*)/)[2];
+                }
+                else if (url.indexOf('&' + field + '=') !== -1)
+                {
+                    // retrieve page number from url, if present
+                    var logid = url.match(/([^\?]*)[\?\&]=(\d*)/)[2];
+                }
+                else {
+                    var logid = null;
+                }
+
                 if (logid === null)
                 {
                     pageNum = parseInt($('#current_page').val()) + 1;
-                    $('#next').attr('href', serviceurl + 'logs?limit='+logLimit+ '&page=' + pageNum);
+                    $('#next').attr('href', serviceurl + 'logs?limit=' + logLimit + '&page=' + pageNum);
 
                     $.get('_logs.tmpl.html', function(templates) {
 
                         // Inject templates.
                         $('body').append(templates);
                         rfn = $('#logs_tmpl').compile(directives);
-                        $('.logs').on('load',infScrollHandler);
+                        $('.logs').on('load', infScrollHandler);
 
-                        $.getJSON(serviceurl + 'logs?limit='+logLimit+'&page='+pageNum, function(logs) {
+                        $.getJSON(serviceurl + 'logs?limit=' + logLimit + '&page=' + pageNum, function(logs) {
                             $('#target').append(rfn(logs));
                             $('.logs').trigger('load');
                             $(":file").filestyle({
@@ -305,7 +310,7 @@
                             $.each(a.attachment, function(i, item) {
                                 $('.modal-body #modalcontainer').append(
                                         '<div id="modalattach" class="attachments masonry-brick">' +
-                                        '<a class="attachment fileName" href="' + serviceurl + 'attachments/' + logid + '/' + item.fileName +'" target="_blank">' +
+                                        '<a class="attachment fileName" href="' + serviceurl + 'attachments/' + logid + '/' + item.fileName + '" target="_blank">' +
                                         '<div class="nonImage"></div>' +
                                         '<img class="image" src="' + serviceurl + 'attachments/' + logid + '/' + item.fileName + ':thumbnail"/>' +
                                         '</a></div>');
@@ -328,7 +333,7 @@
                 // - - - - - - - -
                 $.getJSON(serviceurl + 'tags/', function(tags) {
                     $.each(tags.tag, function(i, item) {
-                        $('#tagsSidebar').append($('<li><a href="'+'javascript:getAttributes(\'tag\',\''+item.name+'\');">' + item.name + '</a></li>'));
+                        $('#tagsSidebar').append($('<li><a href="' + 'javascript:getAttributes(\'tag\',\'' + item.name + '\');">' + item.name + '</a></li>'));
                     });
                 });
                 // - - - - - - - -
@@ -336,7 +341,7 @@
                 // - - - - - - - -
                 $.getJSON(serviceurl + 'logbooks/', function(books) {
                     $.each(books.logbook, function(i, item) {
-                        $('#logsSidebar').append($('<li><a href="'+'javascript:getAttributes(\'logbook\',\''+item.name+'\');">' + item.name + '</a></li>'));
+                        $('#logsSidebar').append($('<li><a href="' + 'javascript:getAttributes(\'logbook\',\'' + item.name + '\');">' + item.name + '</a></li>'));
                     });
                 });
                 // - - - - - - - -
@@ -347,52 +352,52 @@
                         $('#propertiesSidebar').append($('<li><a href="#">' + item.name + '</a></li>'));
                     });
                 });
-                });
+            });
 
-                //----------------------------------------------------------------------
-                //
-                //              Loads action buttons into each log entry
-                //
-                //----------------------------------------------------------------------
-                function loadActionButtons() {
-                    $('div[id^="log_"]').hover(
+            //----------------------------------------------------------------------
+            //
+            //              Loads action buttons into each log entry
+            //
+            //----------------------------------------------------------------------
+            function loadActionButtons() {
+                $('div[id^="log_"]').hover(
                         function() { // Hover in
                             $(this).find('.action_buttons').show();
                         },
                         function() { // Hover out
                             $(this).find('.action_buttons').hide();
                         });
-                }
-
-                //----------------------------------------------------------------------
-                //
-                //              Working to be able to select logs with specific tags
-                //      Doesn't have multiple tag selection yet.
-                //----------------------------------------------------------------------
-                function getAttributes(caller,attr) {
-                            $.getJSON(serviceurl + 'logs?limit='+logLimit+'&page='+pageNum+'&'+caller+'='+attr, function(logs) {
-                            $('#target').append(rfn(logs));
-                            $('.logs').trigger('load');
-                            $(":file").filestyle({
-                                icon: true,
-                                classIcon: "icon-picture",
-                                showFilename: false,
-                                classButton: "btn",
-                                buttonText: "",
-                                textField: false
-                            });
-                            loadActionButtons();
-                        });
-                        $('div.well.row.log').hide();
-
-                    loadLists();
-
-                    $('#dateStart').datepicker();
-                    $('#dateEnd').datepicker();
-                    $('#datePickInput').val(today);
-                
             }
-            
+
+            //----------------------------------------------------------------------
+            //
+            //              Working to be able to select logs with specific tags
+            //      Doesn't have multiple tag selection yet.
+            //----------------------------------------------------------------------
+            function getAttributes(caller, attr) {
+                $.getJSON(serviceurl + 'logs?limit=' + logLimit + '&page=' + pageNum + '&' + caller + '=' + attr, function(logs) {
+                    $('#target').append(rfn(logs));
+                    $('.logs').trigger('load');
+                    $(":file").filestyle({
+                        icon: true,
+                        classIcon: "icon-picture",
+                        showFilename: false,
+                        classButton: "btn",
+                        buttonText: "",
+                        textField: false
+                    });
+                    loadActionButtons();
+                });
+                $('div.well.row.log').hide();
+
+                loadLists();
+
+                $('#dateStart').datepicker();
+                $('#dateEnd').datepicker();
+                $('#datePickInput').val(today);
+
+            }
+
             //----------------------------------------------------------------------
             //
             //        Loads tag/logbook selectors, also loads sidebar properties
@@ -416,7 +421,7 @@
                     });
                 });
             }
-            
+
             //----------------------------------------------------------------------
             //
             //              Paste image from clipboard
@@ -471,12 +476,12 @@
                 // Delete old attachments
                 // - - - - - - - - - - - -
                 $('#modalcontainer > div').remove();
-                
+
                 // - - - - - - - - - - - -
                 // Clear selections
                 // - - - - - - - - - - - -               
                 $('option').each(function(opt) {
-                    $(this).attr('selected',false);
+                    $(this).attr('selected', false);
                 });
                 // - - - - - - - - - - - -
                 // Description/tags/books
@@ -493,7 +498,7 @@
                         $('.modal-body #book').find('[value="' + item.name + '"]').attr('selected', 'selected').attr('id', 'active');
                     });
                 });
-                
+
                 // - - - - - - - -
                 // Attachments
                 // - - - - - - - -
@@ -501,13 +506,13 @@
                     $.each(a.attachment, function(i, item) {
                         $('.modal-body #modalcontainer').append(
                                 '<div id="modalattach" class="attachments masonry-brick">' +
-                                '<a class="attachment fileName" href="' + serviceurl + 'attachments/' + myLogId + '/' + item.fileName +'" target="_blank">' +
+                                '<a class="attachment fileName" href="' + serviceurl + 'attachments/' + myLogId + '/' + item.fileName + '" target="_blank">' +
                                 '<div class="nonImage"></div>' +
                                 '<img class="image" src="' + serviceurl + 'attachments/' + myLogId + '/' + item.fileName + ':thumbnail"/>' +
                                 '</a></div>');
                     });
                 });
-            });           
+            });
 
 
             //----------------------------------------------------------------------
@@ -535,7 +540,7 @@
                     itemSelector: '.attachments'
                 });
             });
-            
+
             var $modalcontainer = $('#modalcontainer');
 
             $modalcontainer.imagesLoaded(function() {
@@ -543,7 +548,7 @@
                     itemSelector: '.attachments'
                 });
             });
-            
+
             //----------------------------------------------------------------------
             //
             //              Infinite scroll
@@ -551,34 +556,56 @@
             //----------------------------------------------------------------------      
             function infScrollHandler() {
                 $('#target').infinitescroll({
-
-                    navSelector  	: "a#next",
-                    nextSelector 	: "a#next",
-                    itemSelector 	: "#target",
+                    navSelector: "a#next",
+                    nextSelector: "a#next",
+                    itemSelector: "#target",
 //                    debug		: true,
-                    dataType	 	: 'json',
-                    appendCallback	: false // USE FOR PREPENDING
-                }, function( response ) {
+                    dataType: 'json',
+                    appendCallback: false // USE FOR PREPENDING
+                }, function(response) {
                     $('#target').append(rfn(response));
-                    
+
                     page = parseInt($('#current_page').val()) + 1;
                     $('#current_page').val(page);
                     loadActionButtons();
                     loadLists();
                     // Changes the url based off the page
-                    window.history.pushState('page'+page,'Title','index.html?page='+page);
+                    window.history.pushState('page' + page, 'Title', 'index.html?page=' + page);
                 });
             }
-            
+
+            $(document).on("click", ".copy-link", function() {
+                var clip = new ZeroClipboard.Client();
+                var link = $(this).attr('data-id');
+
+                //set path
+                ZeroClipboard.setMoviePath('ZeroClipboard.swf');
+                //create client
+                //event
+                clip.addEventListener('mousedown', function() {
+                    clip.setText(link);
+                });
+                clip.addEventListener('complete', function(client, text) {
+                    alert('copied: ' + text);
+                });
+                //glue it to the button
+                clip.glue('copy');
+            });
+
+
+//            function copyToClipboard()
+//            ZeroClipboard.setMoviePath('ZeroClipboard.swf');
+//            var clip = new ZeroClipboard.Client();
+
         </script>
         <div class="container-fluid">
-              <div class="span3">
+            <div class="span3">
                 <div class="accordion" id="accordion2">
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <ul class="nav nav-list"><li class="nav-header">Search</li></ul>
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                            Logbooks
+                                Logbooks
                             </a>
                         </div>
                         <div id="collapseOne" class="accordion-body collapse">
@@ -590,7 +617,7 @@
                         </div>
                         <div class="accordion-heading">
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                            Tags
+                                Tags
                             </a>
                         </div>
                         <div id="collapseTwo" class="accordion-body collapse">
@@ -602,7 +629,7 @@
                         </div>
                         <div class="accordion-heading">
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-                            Properties
+                                Properties
                             </a>
                         </div>
                         <div id="collapseThree" class="accordion-body collapse">
@@ -613,7 +640,7 @@
                         </div>
                         <div class="accordion-heading">
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
-                            Time
+                                Time
                             </a>
                         </div>
                         <div id="collapseFour" class="accordion-body collapse">
@@ -622,12 +649,12 @@
                                     <li><a href="#">Last 8 hours</a></li>
                                     <li><a href="#">Last 24 hours</a></li>
                                     <li class="nav-header">Start date:</li>
-                                        <li class="input-append date" id="dateStart" data-date="" data-date-format="dd-mm-yyyy">
+                                    <li class="input-append date" id="dateStart" data-date="" data-date-format="dd-mm-yyyy">
                                         <input class="span2" size="16" value="" type="text" readonly>
                                         <span class="add-on"><i class="icon-calendar"></i></span>
                                     </li>
                                     <li class="nav-header">End date:</li>
-                                        <li class="input-append date" id="dateEnd" data-date="" data-date-format="dd-mm-yyyy">
+                                    <li class="input-append date" id="dateEnd" data-date="" data-date-format="dd-mm-yyyy">
                                         <input id="datePickInput" class="span2" size="16" value="" type="text" readonly>
                                         <span class="add-on"><i class="icon-calendar"></i></span>
                                     </li>
@@ -636,10 +663,10 @@
                         </div>
                     </div>
                 </div>
-              </div>
-              <div class="span10 offset1">
+            </div>
+            <div class="span10">
                 <div class="container-fluid">
-                        <div id="target"></div>
+                    <div id="target"></div>
                 </div>
             </div>
         </div>
@@ -667,7 +694,7 @@
                         </div>
                     </div>
                     <div id="modalcontainer" class="row span7 clearfix masonry">
-                        
+
                     </div>
                 </div>
             </div>
