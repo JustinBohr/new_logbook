@@ -49,9 +49,11 @@
         <script src="js/jquery.masonry.min.js"></script>
         <script src="js/jquery-ias.min.js"></script>
         <script src="js/jquery.infinitescroll.js"></script>
-        <script src="js/zeroclipboard.js"></script>
+        <!--<script src="js/zeroclipboard.js"></script>-->
+        <!--<script src="js/mootools-core-1.4.5-full-compat.js"></script>-->
 
         <script>serviceurl = "https://controls.frib.msu.edu/olog/resources/";</script>
+        <script>rooturl = "http://localhost:8383/newlogbook/index.html";</script>
         <script>logLimit = "15";</script>
         <!--<script>serviceurl = "http://berryman-win7.intranet.nscl.msu.edu:8080/Olog/resources/";</script>-->
         <script>rfn = null;</script>
@@ -574,28 +576,19 @@
                 });
             }
 
+            //----------------------------------------------------------------------
+            //
+            //              Create copy link (not directly to clipboard)
+            //
+            //----------------------------------------------------------------------
+
             $(document).on("click", ".copy-link", function() {
-                var clip = new ZeroClipboard.Client();
-                var link = $(this).attr('data-id');
-
-                //set path
-                ZeroClipboard.setMoviePath('ZeroClipboard.swf');
-                //create client
-                //event
-                clip.addEventListener('mousedown', function() {
-                    clip.setText(link);
-                });
-                clip.addEventListener('complete', function(client, text) {
-                    alert('copied: ' + text);
-                });
-                //glue it to the button
-                clip.glue('copy');
+                // Needs to be changed to reflect the working URL
+                // Requires some parsing, take care of later....
+//                var link = document.URL+"logid="+$(this).attr('data-id');
+                var link = rooturl+"?logid="+$(this).attr('data-id');
+                window.prompt("Copy to clipboard: Ctrl+C, Enter", link);
             });
-
-
-//            function copyToClipboard()
-//            ZeroClipboard.setMoviePath('ZeroClipboard.swf');
-//            var clip = new ZeroClipboard.Client();
 
         </script>
         <div class="container-fluid">
