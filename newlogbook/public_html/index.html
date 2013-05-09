@@ -12,17 +12,14 @@
         <link rel="stylesheet" href="css/style.css" type="text/css"/>
         <link rel="stylesheet" href="css/jquery.ias.css" type="text/css"/>
 
-<!--        <style type="text/css">
-            body {
-                padding-top: 60px;
-                padding-bottom: 40px;
-            }
+        <style type="text/css">
+
             a.disabled {
                 text-decoration: none;
                 color: black;
                 cursor: default;
             }
-        </style>-->
+        </style>
 
         <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>
@@ -56,7 +53,7 @@
         <script>rfn = null;</script>
         <script>
             var nowTemp = new Date();
-            var today = ((nowTemp.getDate() < 10)?"0":"")+nowTemp.getDate()+"-"+(((nowTemp.getMonth()+1) < 10)?"0":"")+(nowTemp.getMonth()+1)+"-"+nowTemp.getFullYear();
+            var today = ((nowTemp.getDate() < 10) ? "0" : "") + nowTemp.getDate() + "-" + (((nowTemp.getMonth() + 1) < 10) ? "0" : "") + (nowTemp.getMonth() + 1) + "-" + nowTemp.getFullYear();
         </script>
 
     </head>
@@ -65,11 +62,7 @@
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
+
                     <a class="brand" href="index.html">Logbook</a>
                     <div class="btn-group pull-right">
                         <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -83,23 +76,23 @@
                         </ul>
                     </div>
                     <!-- The drop down menu -->
-                    <div class="nav-collapse collapse">
-                        <ul class="nav pull-right">
-                            <li class="divider-vertical"></li>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
-                                <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-                                    <form action="POST" method="post" accept-charset="UTF-8">
-                                        <input id="user_username" style="margin-bottom: 15px;" type="text" name="user[username]" size="30" />
-                                        <input id="user_password" style="margin-bottom: 15px;" type="password" name="user[password]" size="30" />
-                                        <input id="user_remember_me" style="float: left; margin-right: 10px;" type="checkbox" name="user[remember_me]" value="1" />
-                                        <label class="string optional" for="user_remember_me"> Remember me</label>
-                                        <input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
-                                    </form>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+
+                    <ul class="nav pull-right">
+                        <li class="divider-vertical"></li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
+                            <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+                                <form action="POST" method="post" accept-charset="UTF-8">
+                                    <input id="user_username" style="margin-bottom: 15px;" type="text" name="user[username]" size="30" />
+                                    <input id="user_password" style="margin-bottom: 15px;" type="password" name="user[password]" size="30" />
+                                    <input id="user_remember_me" style="float: left; margin-right: 10px;" type="checkbox" name="user[remember_me]" value="1" />
+                                    <label class="string optional" for="user_remember_me"> Remember me</label>
+                                    <input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+
                 </div>
             </div>
         </div>
@@ -169,7 +162,6 @@
                             }},
                         '.level': 'log.level',
                         '.description': 'log.description',
-
                         '.attachments': {'attachment<-log.attachments': {
                                 '.attachment@href': function(a) {
                                     return serviceurl + 'attachments/' + a.log.item.id + '/' + a.item.fileName;
@@ -202,57 +194,59 @@
             //
             //----------------------------------------------------------------------
             $(document).ready(function() {
-                
+
                 var field = 'page';
                 var url = window.location.href;
-                if(url.indexOf('?' + field + '=') != -1)
-                    {
-                        // retrieve page number from url, if present
-                        $('#current_page').val(
-                            url.match(/([^\?]*)[\?\&]page=(\d*)/)[2]-1
-                        );
-                    }
-                else if(url.indexOf('&' + field + '=') != -1)
-                    {
-                        // retrieve page number from url, if present
-                        $('#current_page').val(
-                            url.match(/([^\?]*)[\?\&]=(\d*)/)[2]-1
-                        );
-                    }
+                if (url.indexOf('?' + field + '=') != -1)
+                {
+                    // retrieve page number from url, if present
+                    $('#current_page').val(
+                            url.match(/([^\?]*)[\?\&]page=(\d*)/)[2] - 1
+                            );
+                }
+                else if (url.indexOf('&' + field + '=') != -1)
+                {
+                    // retrieve page number from url, if present
+                    $('#current_page').val(
+                            url.match(/([^\?]*)[\?\&]=(\d*)/)[2] - 1
+                            );
+                }
                 else
-                    {
-                        // set page to 1 if not present
-                        $('#current_page').val(0);
-                    }
-                
+                {
+                    // set page to 1 if not present
+                    $('#current_page').val(0);
+                }
+
                 // Retrieve single log if url contains logid
                 var field = 'logid';
                 var url = window.location.href;
-                if(url.indexOf('?' + field + '=') != -1)
-                    {
-                        // retrieve page number from url, if present
-                        var logid = url.match(/([^\?]*)[\?\&]logid=(\d*)/)[2];
-                    }
-                else if(url.indexOf('&' + field + '=') !== -1)
-                    {
-                        // retrieve page number from url, if present
-                        var logid = url.match(/([^\?]*)[\?\&]=(\d*)/)[2];
-                    }
-                else { var logid = null; }
-                
+                if (url.indexOf('?' + field + '=') != -1)
+                {
+                    // retrieve page number from url, if present
+                    var logid = url.match(/([^\?]*)[\?\&]logid=(\d*)/)[2];
+                }
+                else if (url.indexOf('&' + field + '=') !== -1)
+                {
+                    // retrieve page number from url, if present
+                    var logid = url.match(/([^\?]*)[\?\&]=(\d*)/)[2];
+                }
+                else {
+                    var logid = null;
+                }
+
                 if (logid === null)
                 {
                     pageNum = parseInt($('#current_page').val()) + 1;
-                    $('#next').attr('href', serviceurl + 'logs?limit='+logLimit+ '&page=' + pageNum);
+                    $('#next').attr('href', serviceurl + 'logs?limit=' + logLimit + '&page=' + pageNum);
 
                     $.get('_logs.tmpl.html', function(templates) {
 
                         // Inject templates.
                         $('body').append(templates);
                         rfn = $('#logs_tmpl').compile(directives);
-                        $('.logs').on('load',infScrollHandler);
+                        $('.logs').on('load', infScrollHandler);
 
-                        $.getJSON(serviceurl + 'logs?limit='+logLimit+'&page='+pageNum, function(logs) {
+                        $.getJSON(serviceurl + 'logs?limit=' + logLimit + '&page=' + pageNum, function(logs) {
                             $('#target').append(rfn(logs));
                             $('.logs').trigger('load');
                             $(":file").filestyle({
@@ -305,7 +299,7 @@
                             $.each(a.attachment, function(i, item) {
                                 $('.modal-body #modalcontainer').append(
                                         '<div id="modalattach" class="attachments masonry-brick">' +
-                                        '<a class="attachment fileName" href="' + serviceurl + 'attachments/' + logid + '/' + item.fileName +'" target="_blank">' +
+                                        '<a class="attachment fileName" href="' + serviceurl + 'attachments/' + logid + '/' + item.fileName + '" target="_blank">' +
                                         '<div class="nonImage"></div>' +
                                         '<img class="image" src="' + serviceurl + 'attachments/' + logid + '/' + item.fileName + ':thumbnail"/>' +
                                         '</a></div>');
@@ -328,7 +322,7 @@
                 // - - - - - - - -
                 $.getJSON(serviceurl + 'tags/', function(tags) {
                     $.each(tags.tag, function(i, item) {
-                        $('#tagsSidebar').append($('<li><a href="'+'javascript:getAttributes(\'tag\',\''+item.name+'\');">' + item.name + '</a></li>'));
+                        $('#tagsSidebar').append($('<li><a href="' + 'javascript:getAttributes(\'tag\',\'' + item.name + '\');">' + item.name + '</a></li>'));
                     });
                 });
                 // - - - - - - - -
@@ -336,7 +330,7 @@
                 // - - - - - - - -
                 $.getJSON(serviceurl + 'logbooks/', function(books) {
                     $.each(books.logbook, function(i, item) {
-                        $('#logsSidebar').append($('<li><a href="'+'javascript:getAttributes(\'logbook\',\''+item.name+'\');">' + item.name + '</a></li>'));
+                        $('#logsSidebar').append($('<li><a href="' + 'javascript:getAttributes(\'logbook\',\'' + item.name + '\');">' + item.name + '</a></li>'));
                     });
                 });
                 // - - - - - - - -
@@ -347,52 +341,53 @@
                         $('#propertiesSidebar').append($('<li><a href="#">' + item.name + '</a></li>'));
                     });
                 });
-                });
+            });
 
-                //----------------------------------------------------------------------
-                //
-                //              Loads action buttons into each log entry
-                //
-                //----------------------------------------------------------------------
-                function loadActionButtons() {
-                    $('div[id^="log_"]').hover(
+
+            //----------------------------------------------------------------------
+            //
+            //              Loads action buttons into each log entry
+            //
+            //----------------------------------------------------------------------
+            function loadActionButtons() {
+                $('div[id^="log_"]').hover(
                         function() { // Hover in
                             $(this).find('.action_buttons').show();
                         },
                         function() { // Hover out
                             $(this).find('.action_buttons').hide();
                         });
-                }
-
-                //----------------------------------------------------------------------
-                //
-                //              Working to be able to select logs with specific tags
-                //      Doesn't have multiple tag selection yet.
-                //----------------------------------------------------------------------
-                function getAttributes(caller,attr) {
-                            $.getJSON(serviceurl + 'logs?limit='+logLimit+'&page='+pageNum+'&'+caller+'='+attr, function(logs) {
-                            $('#target').append(rfn(logs));
-                            $('.logs').trigger('load');
-                            $(":file").filestyle({
-                                icon: true,
-                                classIcon: "icon-picture",
-                                showFilename: false,
-                                classButton: "btn",
-                                buttonText: "",
-                                textField: false
-                            });
-                            loadActionButtons();
-                        });
-                        $('div.well.row.log').hide();
-
-                    loadLists();
-
-                    $('#dateStart').datepicker();
-                    $('#dateEnd').datepicker();
-                    $('#datePickInput').val(today);
-                
             }
-            
+
+            //----------------------------------------------------------------------
+            //
+            //              Working to be able to select logs with specific tags
+            //      Doesn't have multiple tag selection yet.
+            //----------------------------------------------------------------------
+            function getAttributes(caller, attr) {
+                $.getJSON(serviceurl + 'logs?limit=' + logLimit + '&page=' + pageNum + '&' + caller + '=' + attr, function(logs) {
+                    $('#target').append(rfn(logs));
+                    $('.logs').trigger('load');
+                    $(":file").filestyle({
+                        icon: true,
+                        classIcon: "icon-picture",
+                        showFilename: false,
+                        classButton: "btn",
+                        buttonText: "",
+                        textField: false
+                    });
+                    loadActionButtons();
+                });
+                $('div.well.row.log').hide();
+
+                loadLists();
+
+                $('#dateStart').datepicker();
+                $('#dateEnd').datepicker();
+                $('#datePickInput').val(today);
+
+            }
+
             //----------------------------------------------------------------------
             //
             //        Loads tag/logbook selectors, also loads sidebar properties
@@ -416,7 +411,99 @@
                     });
                 });
             }
-            
+
+            //----------------------------------------------------------------------
+            //
+            //             Allow and handle Drop into attachments
+            //
+            //----------------------------------------------------------------------
+            if (window.FileReader) {
+                var drop;
+                addEventHandler(window, 'load', function() {
+                    //var status = document.getElementById('status');
+                    drop = document.getElementById('drop');
+                    var list = document.getElementById('list');
+
+                    function cancel(e) {
+                        if (e.preventDefault) {
+                            e.preventDefault();
+                        }
+                        return false;
+                    }
+
+                    // Tells the browser that we *can* drop on this target
+                    addEventHandler(drop, 'dragover', cancel);
+                    addEventHandler(drop, 'dragenter', cancel);
+
+                    addEventHandler(drop, 'drop', function(e) {
+                        e = e || window.event; // get window.event if e argument missing (in IE)   
+                        if (e.preventDefault) {
+                            e.preventDefault();
+                        } // stops the browser from redirecting off to the image.
+
+                        var dt = e.dataTransfer;
+                        var files = dt.files;
+                        for (var i = 0; i < files.length; i++) {
+                        var file = files[i];
+                                var reader = new FileReader();
+                                //attach event handlers here...
+
+                                reader.readAsDataURL(file);
+                                addEventHandler(reader, 'loadend', function(e, file) {
+                            var bin = this.result;
+                            var newFile = document.createElement('div');
+                            newFile.innerHTML = 'Loaded : ' + file.name + ' size ' + file.size + ' B';
+                            list.appendChild(newFile);
+                            var fileNumber = list.getElementsByTagName('div').length;
+                            status.innerHTML = fileNumber < files.length
+                                    ? 'Loaded 100% of file ' + fileNumber + ' of ' + files.length + '...'
+                                    : 'Done loading. processed ' + fileNumber + ' files.';
+                            var filetype = file.split('.').pop();
+                            switch (filetype.toLowerCase()) {
+                                case 'txt':
+                                case 'doc':
+                                case 'jpg':
+                                case 'jpg':
+                                case 'gif':
+                                case 'bmp':
+                                case 'png':
+                                    //etc
+                                    var img = document.createElement("img");
+                                    img.file = file;
+                                    img.src = bin;
+                                    list.appendChild(img);
+                            }
+                            .bindToEventHandler(file));
+                        }
+                        return false;
+                    });
+                    Function.prototype.bindToEventHandler = function bindToEventHandler() {
+                        var handler = this;
+                        var boundParameters = Array.prototype.slice.call(arguments);
+                        //create closure
+                        return function(e) {
+                            e = e || window.event; // get window.event if e argument missing (in IE)   
+                            boundParameters.unshift(e);
+                            handler.apply(this, boundParameters);
+                        }
+                    };
+                });
+            } else {
+                //document.getElementById('status').innerHTML = 'Your browser does not support the HTML5 FileReader.';
+            }
+            function addEventHandler(obj, evt, handler) {
+                if (obj.addEventListener) {
+                    // W3C method
+                    obj.addEventListener(evt, handler, false);
+                } else if (obj.attachEvent) {
+                    // IE method.
+                    obj.attachEvent('on' + evt, handler);
+                } else {
+                    // Old school method.
+                    obj['on' + evt] = handler;
+                }
+            }
+
             //----------------------------------------------------------------------
             //
             //              Paste image from clipboard
@@ -471,12 +558,12 @@
                 // Delete old attachments
                 // - - - - - - - - - - - -
                 $('#modalcontainer > div').remove();
-                
+
                 // - - - - - - - - - - - -
                 // Clear selections
                 // - - - - - - - - - - - -               
                 $('option').each(function(opt) {
-                    $(this).attr('selected',false);
+                    $(this).attr('selected', false);
                 });
                 // - - - - - - - - - - - -
                 // Description/tags/books
@@ -493,7 +580,7 @@
                         $('.modal-body #book').find('[value="' + item.name + '"]').attr('selected', 'selected').attr('id', 'active');
                     });
                 });
-                
+
                 // - - - - - - - -
                 // Attachments
                 // - - - - - - - -
@@ -501,13 +588,13 @@
                     $.each(a.attachment, function(i, item) {
                         $('.modal-body #modalcontainer').append(
                                 '<div id="modalattach" class="attachments masonry-brick">' +
-                                '<a class="attachment fileName" href="' + serviceurl + 'attachments/' + myLogId + '/' + item.fileName +'" target="_blank">' +
+                                '<a class="attachment fileName" href="' + serviceurl + 'attachments/' + myLogId + '/' + item.fileName + '" target="_blank">' +
                                 '<div class="nonImage"></div>' +
                                 '<img class="image" src="' + serviceurl + 'attachments/' + myLogId + '/' + item.fileName + ':thumbnail"/>' +
                                 '</a></div>');
                     });
                 });
-            });           
+            });
 
 
             //----------------------------------------------------------------------
@@ -535,7 +622,7 @@
                     itemSelector: '.attachments'
                 });
             });
-            
+
             var $modalcontainer = $('#modalcontainer');
 
             $modalcontainer.imagesLoaded(function() {
@@ -543,7 +630,7 @@
                     itemSelector: '.attachments'
                 });
             });
-            
+
             //----------------------------------------------------------------------
             //
             //              Infinite scroll
@@ -551,34 +638,33 @@
             //----------------------------------------------------------------------      
             function infScrollHandler() {
                 $('#target').infinitescroll({
-
-                    navSelector  	: "a#next",
-                    nextSelector 	: "a#next",
-                    itemSelector 	: "#target",
+                    navSelector: "a#next",
+                    nextSelector: "a#next",
+                    itemSelector: "#target",
 //                    debug		: true,
-                    dataType	 	: 'json',
-                    appendCallback	: false // USE FOR PREPENDING
-                }, function( response ) {
+                    dataType: 'json',
+                    appendCallback: false // USE FOR PREPENDING
+                }, function(response) {
                     $('#target').append(rfn(response));
-                    
+
                     page = parseInt($('#current_page').val()) + 1;
                     $('#current_page').val(page);
                     loadActionButtons();
                     loadLists();
                     // Changes the url based off the page
-                    window.history.pushState('page'+page,'Title','index.html?page='+page);
+                    window.history.pushState('page' + page, 'Title', 'index.html?page=' + page);
                 });
             }
-            
+
         </script>
         <div class="container-fluid">
-              <div class="span3">
+            <div class="span3">
                 <div class="accordion" id="accordion2">
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <ul class="nav nav-list"><li class="nav-header">Search</li></ul>
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                            Logbooks
+                                Logbooks
                             </a>
                         </div>
                         <div id="collapseOne" class="accordion-body collapse">
@@ -590,7 +676,7 @@
                         </div>
                         <div class="accordion-heading">
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                            Tags
+                                Tags
                             </a>
                         </div>
                         <div id="collapseTwo" class="accordion-body collapse">
@@ -602,7 +688,7 @@
                         </div>
                         <div class="accordion-heading">
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-                            Properties
+                                Properties
                             </a>
                         </div>
                         <div id="collapseThree" class="accordion-body collapse">
@@ -613,7 +699,7 @@
                         </div>
                         <div class="accordion-heading">
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
-                            Time
+                                Time
                             </a>
                         </div>
                         <div id="collapseFour" class="accordion-body collapse">
@@ -622,12 +708,12 @@
                                     <li><a href="#">Last 8 hours</a></li>
                                     <li><a href="#">Last 24 hours</a></li>
                                     <li class="nav-header">Start date:</li>
-                                        <li class="input-append date" id="dateStart" data-date="" data-date-format="dd-mm-yyyy">
+                                    <li class="input-append date" id="dateStart" data-date="" data-date-format="dd-mm-yyyy">
                                         <input class="span2" size="16" value="" type="text" readonly>
                                         <span class="add-on"><i class="icon-calendar"></i></span>
                                     </li>
                                     <li class="nav-header">End date:</li>
-                                        <li class="input-append date" id="dateEnd" data-date="" data-date-format="dd-mm-yyyy">
+                                    <li class="input-append date" id="dateEnd" data-date="" data-date-format="dd-mm-yyyy">
                                         <input id="datePickInput" class="span2" size="16" value="" type="text" readonly>
                                         <span class="add-on"><i class="icon-calendar"></i></span>
                                     </li>
@@ -636,10 +722,10 @@
                         </div>
                     </div>
                 </div>
-              </div>
-              <div class="span10 offset1">
+            </div>
+            <div class="span10">
                 <div class="container-fluid">
-                        <div id="target"></div>
+                    <div id="target"></div>
                 </div>
             </div>
         </div>
@@ -667,7 +753,7 @@
                         </div>
                     </div>
                     <div id="modalcontainer" class="row span7 clearfix masonry">
-                        
+
                     </div>
                 </div>
             </div>
@@ -682,7 +768,9 @@
                 <h3>Add Attachment</h3>
             </div>
             <div class="modal-body">
-                <div class="span4" contenteditable="true"></div>
+                <DIV>Drag the files from a folder to a selected area ...</DIV>
+                <div id="drop" class="span4" contenteditable="true"></div>
+                <div id="list" class="span4"></div>
             </div>
             <div class="modal-footer">
                 <form class="span1" style='margin: 0px; width: 40px; padding: 0px' action="localhost" method="POST" enctype="multipart/form-data">
