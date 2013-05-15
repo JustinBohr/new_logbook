@@ -463,20 +463,42 @@
                             status.innerHTML = fileNumber < files.length
                                     ? 'Loaded 100% of file ' + fileNumber + ' of ' + files.length + '...'
                                     : 'Done loading. processed ' + fileNumber + ' files.';
-                            var filetype = file.split('.').pop();
-                            //switch (filetype.toLowerCase()) {
-                                //case 'txt':
+                            var filetype = file.name.split('.').pop();
+                            switch (filetype.toLowerCase()) {
+                               case 'txt':
+                                    var a = document.createElement("a");
+                                    a.appendChild(document.createTextNode(file.name));
+                                    list.appendChild(a);
+                                    break;
                                // case 'doc':
-                               // case 'jpg':
-                               // case 'jpg':
-                               // case 'gif':
-                               // case 'bmp':
-                               // case 'png':
-                                    //etc
+                               case 'jpg':
                                     var img = document.createElement("img");
                                     img.file = file;
                                     img.src = bin;
                                     list.appendChild(img);
+                                    break;
+                               case 'gif':
+                                    var img = document.createElement("img");
+                                    img.file = file;
+                                    img.src = bin;
+                                    list.appendChild(img);
+                                    break;
+                               case 'bmp':
+                                    var img = document.createElement("img");
+                                    img.file = file;
+                                    img.src = bin;
+                                    list.appendChild(img);
+                                    break;
+                                case 'png':
+                                    var img = document.createElement("img");
+                                    img.file = file;
+                                    img.src = bin;
+                                    list.appendChild(img);
+                                    break;
+                                default:
+                                    break;
+                            }
+                                    
                             }
                             .bindToEventHandler(file));
                         }
