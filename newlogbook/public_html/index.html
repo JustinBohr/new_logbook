@@ -465,12 +465,6 @@
                                     : 'Done loading. processed ' + fileNumber + ' files.';
                             var filetype = file.name.split('.').pop();
                             switch (filetype.toLowerCase()) {
-                               case 'txt':
-                                    var a = document.createElement("a");
-                                    a.appendChild(document.createTextNode(file.name));
-                                    list.appendChild(a);
-                                    break;
-                               // case 'doc':
                                case 'jpg':
                                     var img = document.createElement("img");
                                     img.file = file;
@@ -496,6 +490,9 @@
                                     list.appendChild(img);
                                     break;
                                 default:
+                                    var a = document.createElement("div");
+                                    a.appendChild(document.createTextNode(file.name));
+                                    list.appendChild(a);
                                     break;
                             }
                                     
