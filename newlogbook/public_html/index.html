@@ -457,8 +457,10 @@
                                 addEventHandler(reader, 'loadend', function(e, file) {
                             var bin = this.result;
                             var newFile = document.createElement('div');
-                            newFile.innerHTML = 'Loaded : ' + file.name + ' size ' + file.size + ' B';
-                            list.appendChild(newFile);
+                            var newInfo = document.createElement('div');
+                            newFile.className = "attachments masonry-brick";
+                            newInfo.innerHTML = 'Loaded : ' + file.name + ' size ' + file.size + ' B';
+                            //list.appendChild(newFile);
                             var fileNumber = list.getElementsByTagName('div').length;
                             status.innerHTML = fileNumber < files.length
                                     ? 'Loaded 100% of file ' + fileNumber + ' of ' + files.length + '...'
@@ -469,26 +471,31 @@
                                     var img = document.createElement("img");
                                     img.file = file;
                                     img.src = bin;
-                                    list.appendChild(img);
+                                    newFile.appendChild(img);
+                                    newFile.appendChild(newInfo);
+                                    list.appendChild(newFile);
                                     break;
                                case 'gif':
                                     var img = document.createElement("img");
                                     img.file = file;
                                     img.src = bin;
-                                    list.appendChild(img);
-                                    break;
+                                    newFile.appendChild(img);
+                                    newFile.appendChild(newInfo);
+                                    list.appendChild(newFile);
                                case 'bmp':
                                     var img = document.createElement("img");
                                     img.file = file;
                                     img.src = bin;
-                                    list.appendChild(img);
-                                    break;
+                                    newFile.appendChild(img);
+                                    newFile.appendChild(newInfo);
+                                    list.appendChild(newFile);
                                 case 'png':
                                     var img = document.createElement("img");
                                     img.file = file;
                                     img.src = bin;
-                                    list.appendChild(img);
-                                    break;
+                                    newFile.appendChild(img);
+                                    newFile.appendChild(newInfo);
+                                    list.appendChild(newFile);
                                 default:
                                     var a = document.createElement("div");
                                     a.appendChild(document.createTextNode(file.name));
@@ -535,7 +542,7 @@
             //----------------------------------------------------------------------
             document.body.addEventListener("paste", function(e) {
                 for (var i = 0; i < e.clipboardData.items.length; i++) {
-                    if (e.clipboardData.items[i].kind === "file" && e.clipboardData.items[i].type === "image/png") {
+                    if (e.clipboardData.items[i].kind === "file" ) {
                         // get the blob
                         var imageFile = e.clipboardData.items[i].getAsFile();
 
@@ -543,7 +550,7 @@
                         var fileReader = new FileReader();
                         fileReader.onloadend = function(e) {
                             // create an image
-                            var image = document.createElement("IMG");
+                            var image = document.createElement("img");
                             image.src = this.result;
 
                             // insert the image
@@ -571,6 +578,12 @@
                 }
             });
 
+
+
+            $(document).on("click", ".open-edit", function() {
+                $('#modalcontainer > div').remove();
+            }
+            
             //----------------------------------------------------------------------
             //
             //              Load info into edit modal
@@ -640,6 +653,13 @@
             //
             //----------------------------------------------------------------------
             var $container = $('#container');
+
+            $container.imagesLoaded(function() {
+                $container.masonry({
+                    itemSelector: '.attachments'
+                });
+            });
+            var $attachcontainer = $('#list');
 
             $container.imagesLoaded(function() {
                 $container.masonry({
@@ -767,7 +787,7 @@
                 </div>
             </div>
         </div>
-
+        
         <div id="edit" class="modal hide fade in bigModal" style="display: none; ">
             <div class="bigModal-header span7">
                 <a class="close" data-dismiss="modal">x</a>
@@ -800,6 +820,9 @@
                 <a href="#" class="btn btn-success">Submit</a>
             </div>
         </div>
+        
+        
+        
         <div id="add" class="modal hide fade in" style="display: none; ">
             <div class="modal-header">
                 <a class="close" data-dismiss="modal">x</a>
@@ -808,7 +831,7 @@
             <div class="modal-body">
                 <DIV>Drag the files from a folder to a selected area ...</DIV>
                 <div id="drop" class="span4" contenteditable="true"></div>
-                <div id="list" class="span4"></div>
+                <div id="list" class="row span6 clearfix masonry"></div>
             </div>
             <div class="modal-footer">
                 <form class="span1" style='margin: 0px; width: 40px; padding: 0px' action="localhost" method="POST" enctype="multipart/form-data">
